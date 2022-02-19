@@ -86,7 +86,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     }
 
     @Override
-    public void set(T data, int i) {
+    public void set(int i, T data) {
         getItem(i).set(data);
     }
 
@@ -121,7 +121,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     }
 
     @Override
-    public void add(T data, int i) {
+    public void add(int i, T data) {
         if(i == 0) {
             addFirst(data);
         } else if(i == count) {
@@ -238,9 +238,9 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
             @Override
             public T next() {
                 if(hasNext()) {
-                    T data = current.get();
+                    T result = current.get();
                     current = current.getNextItem();
-                    return data;
+                    return result;
                 } else {
                     throw new NoSuchElementException();
                 }

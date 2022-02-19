@@ -16,6 +16,8 @@ public @Test class ListTest {
         test.testRemove();
         test.testClear();
         test.testIterator();
+        test.testForwardIteration();
+        test.testBackwardIteration();
 
         System.out.println("OK");
     }
@@ -61,7 +63,7 @@ public @Test class ListTest {
         Assert.assertNotNull(list.getFirstItem().getNextItem());
         Assert.assertEquals(list.getFirstItem(), list.getFirstItem().getNextItem().getPreviousItem());
 
-        list.add("2", 2);
+        list.add(2, "2");
 
         Assert.assertEquals(4, list.count());
         Assert.assertEquals("0", list.get(0));
@@ -123,18 +125,18 @@ public @Test class ListTest {
     private void testSet() {
         List<String> list = new List<>(null, "1", null);
 
-        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.set("x", -1));
-        list.set("2", 2);
-        list.set(null, 1);
-        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.set("y", 3));
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.set(-1, "x"));
+        list.set(2, "2");
+        list.set(1, null);
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.set(3, "y"));
 
         Assert.assertEquals(3, list.count());
         Assert.assertEquals(null, list.get(0));
         Assert.assertEquals(null, list.get(1));
         Assert.assertEquals("2", list.get(2));
 
-        list.set("0", 0);
-        list.set("2", 2);
+        list.set(0, "0");
+        list.set(2, "2");
 
         Assert.assertEquals("0", list.getFirst());
         Assert.assertEquals("2", list.getLast());
@@ -207,5 +209,29 @@ public @Test class ListTest {
         }
 
         Assert.assertEquals(i, list.count());
+    }
+
+    private void testForwardIteration() {
+        List<Integer> list = new List<>(0, 1, 2, 3, 4, 5);
+
+        int i = 0;
+        for(ListItem<Integer> item = list.getFirstItem(); item != null; item = item.getNextItem()) {
+            Assert.assertEquals(i, item.get());
+            i++;
+        }
+
+        Assert.assertEquals(6, i);
+    }
+
+    private void testBackwardIteration() {
+        List<Integer> list = new List<>(0, 1, 2, 3, 4, 5);
+
+        int i = 5;
+        for(ListItem<Integer> item = list.getLastItem(); item != null; item = item.getPreviousItem()) {
+            Assert.assertEquals(i, item.get());
+            i--;
+        }
+
+        Assert.assertEquals(-1, i);
     }
 }

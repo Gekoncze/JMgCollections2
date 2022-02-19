@@ -11,6 +11,9 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
     private final T[] data;
 
     public Array(@Mandatory Class<T> clazz, int count) {
+        if(count < 0) {
+            throw new IllegalArgumentException("Negative array size of " + count + ".");
+        }
         //noinspection unchecked
         data = (T[]) java.lang.reflect.Array.newInstance(clazz, count);
     }
@@ -51,7 +54,7 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
     }
 
     @Override
-    public void set(T item, int i) {
+    public void set(int i, T item) {
         data[i] = item;
     }
 
@@ -62,7 +65,7 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
 
     private static <T> int count(@Mandatory Iterable<? extends T> iterable) {
         int count = 0;
-        for(T item : iterable) {
+        for(T ignored : iterable) {
             count++;
         }
         return count;
