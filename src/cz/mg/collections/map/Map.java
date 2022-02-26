@@ -5,43 +5,54 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
 import cz.mg.collections.pair.Pair;
+import cz.mg.collections.utilities.CompareFunction;
+import cz.mg.collections.utilities.CompareFunctions;
+import cz.mg.collections.utilities.HashFunction;
+import cz.mg.collections.utilities.HashFunctions;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
     private final @Mandatory MapPair<K,V>[] array;
     private @Optional MapPair<K,V> first;
     private int count;
+    private final @Mandatory CompareFunction compareFunction;
+    private final @Mandatory HashFunction hashFunction;
 
-    public Map(int size) {
-        if(size < 1) {
-            throw new IllegalArgumentException("Map size must be > 0.");
+    public Map(int cache, @Mandatory CompareFunction compareFunction, @Mandatory HashFunction hashFunction) {
+        if(cache < 1) {
+            throw new IllegalArgumentException("Cache must be > 0.");
         }
 
         //noinspection unchecked
-        array = new MapPair[size];
+        array = new MapPair[cache];
+        this.compareFunction = compareFunction;
+        this.hashFunction = hashFunction;
+    }
+
+    public Map(int cache) {
+        this(cache, CompareFunctions.EQUALS, HashFunctions.HASH_CODE);
     }
 
     @SafeVarargs
-    public Map(int size, Pair<K,V>... pairs) {
-        this(size);
+    public Map(int cache, Pair<K,V>... pairs) {
+        this(cache);
         for(Pair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
     }
 
-    public Map(int size, @Mandatory Iterable<Pair<K,V>> pairs) {
-        this(size);
+    public Map(int cache, @Mandatory Iterable<Pair<K,V>> pairs) {
+        this(cache);
         for(Pair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
     }
 
-    public Map(int size, @Mandatory Map<K,V> map) {
-        this(size);
+    public Map(int cache, @Mandatory Map<K,V> map) {
+        this(cache);
         for(MapPair<K,V> pair : map) {
             set(pair.getKey(), pair.getValue());
         }
@@ -58,7 +69,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
         MapPair<K,V> pair = array[index];
 
         while(pair != null && pair.index == index) {
-            if(Objects.equals(key, pair.key)) {
+            if(compareFunction.equals(key, pair.key)) {
                 return pair.value;
             } else {
                 pair = pair.nextPair;
@@ -77,7 +88,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
         while(pair != null && pair.index == index) {
             last = pair;
 
-            if(Objects.equals(key, pair.key)) {
+            if(compareFunction.equals(key, pair.key)) {
                 pair.value = value;
                 return;
             } else {
@@ -96,7 +107,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
     }
 
     private int getIndex(K key) {
-        return Math.abs(Objects.hashCode(key) % array.length);
+        return Math.abs(hashFunction.hash(key) % array.length);
     }
 
     @Override
@@ -107,7 +118,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
     }
 
     @Override
-    public Iterator<MapPair<K, V>> iterator() {
+    public @Mandatory Iterator<MapPair<K, V>> iterator() {
         return new Iterator<>() {
             private @Optional MapPair<K,V> pair = first;
 
@@ -117,7 +128,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
             }
 
             @Override
-            public MapPair<K, V> next() {
+            public @Mandatory MapPair<K, V> next() {
                 if(hasNext()) {
                     MapPair<K,V> result = pair;
                     pair = pair.nextPair;

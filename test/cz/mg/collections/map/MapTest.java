@@ -4,8 +4,11 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.collections.Assert;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
+import cz.mg.collections.utilities.CompareFunctions;
+import cz.mg.collections.utilities.HashFunctions;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public @Test class MapTest {
     public static void main(String[] args) {
@@ -103,6 +106,23 @@ public @Test class MapTest {
         Assert.assertEquals("value1", map1.get("key1"));
         Assert.assertEquals("value2", map1.get("key2"));
         Assert.assertExceptionThrown(NoSuchElementException.class, () -> map1.get("key3"));
+
+        TestClass k1 = new TestClass(1);
+        TestClass k2 = new TestClass(1);
+
+        Map<TestClass, String> map4 = new Map<>(10, CompareFunctions.REFERENCE, HashFunctions.HASH_CODE);
+        map4.set(k1, "v1");
+        map4.set(k2, "v2");
+
+        Assert.assertEquals("v1", map4.get(k1));
+        Assert.assertEquals("v2", map4.get(k2));
+
+        Map<TestClass, String> map5 = new Map<>(10, CompareFunctions.EQUALS, HashFunctions.HASH_CODE);
+        map5.set(k1, "v1");
+        map5.set(k2, "v2");
+
+        Assert.assertEquals("v2", map5.get(k1));
+        Assert.assertEquals("v2", map5.get(k2));
     }
 
     private void testClear() {
@@ -128,5 +148,26 @@ public @Test class MapTest {
         }
 
         Assert.assertEquals(3, i);
+    }
+
+    private static class TestClass {
+        private final int value;
+
+        public TestClass(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            TestClass testClass = (TestClass) o;
+            return value == testClass.value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
     }
 }
