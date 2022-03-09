@@ -1,7 +1,7 @@
 package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
-import cz.mg.collections.Assert;
+import cz.mg.test.Assert;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
 import cz.mg.collections.utilities.CompareFunctions;

@@ -1,7 +1,7 @@
 package cz.mg.collections.pair;
 
 import cz.mg.annotations.classes.Test;
-import cz.mg.collections.Assert;
+import cz.mg.test.Assert;
 
 public @Test class PairTest {
     public static void main(String[] args) {
