@@ -80,6 +80,22 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
     }
 
     @Override
+    public V getOrDefault(K key, V defaultValue) {
+        int index = getIndex(key);
+        MapPair<K,V> pair = array[index];
+
+        while(pair != null && pair.index == index) {
+            if(compareFunction.equals(key, pair.key)) {
+                return pair.value;
+            } else {
+                pair = pair.nextPair;
+            }
+        }
+
+        return defaultValue;
+    }
+
+    @Override
     public void set(K key, V value) {
         int index = getIndex(key);
         MapPair<K,V> pair = array[index];
