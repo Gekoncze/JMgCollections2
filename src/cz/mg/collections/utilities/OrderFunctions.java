@@ -21,7 +21,7 @@ public @Utility class OrderFunctions {
     public static OrderFunction<Float> FLOAT_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Float::compareTo);
     public static OrderFunction<Double> DOUBLE_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Double::compareTo);
 
-    private static <T> int nullSafeFirst(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
+    public static <T> int nullSafeFirst(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
         if (a == null && b == null) {
             return 0;
         } else if (a == null) {
@@ -33,7 +33,7 @@ public @Utility class OrderFunctions {
         }
     }
 
-    private static <T> int nullSafeLast(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
+    public static <T> int nullSafeLast(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
         if (a == null && b == null) {
             return 0;
         } else if (a == null) {
