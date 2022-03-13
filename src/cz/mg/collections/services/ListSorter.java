@@ -25,7 +25,7 @@ public @Service class ListSorter {
     private ListSorter() {
     }
 
-    public <T> void sort(@Mandatory List<T> list, @Mandatory OrderFunction orderFunction) {
+    public <T> void sort(@Mandatory List<T> list, @Mandatory OrderFunction<T> orderFunction) {
         Array array = new Array(Object.class, list);
         arraySorter.sort(array, orderFunction);
 
@@ -36,7 +36,7 @@ public @Service class ListSorter {
         }
     }
 
-    public <T> @Mandatory List<T> sortCopy(@Mandatory List<T> list, @Mandatory OrderFunction orderFunction) {
+    public <T> @Mandatory List<T> sortCopy(@Mandatory List<T> list, @Mandatory OrderFunction<T> orderFunction) {
         List<T> copy = new List<>(list);
         sort(copy, orderFunction);
         return copy;

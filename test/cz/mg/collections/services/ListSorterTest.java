@@ -19,7 +19,7 @@ public @Test class ListSorterTest {
     private void testSort() {
         List<Integer> list = new List<>(3, 4, null, 0, 2, 1);
         ListSorter sorter = ListSorter.getInstance();
-        sorter.sort(list, OrderFunctions.INTEGER);
+        sorter.sort(list, OrderFunctions.INTEGER_NULL_LAST);
 
         Assert.assertEquals(0, list.get(0));
         Assert.assertEquals(1, list.get(1));
@@ -32,7 +32,7 @@ public @Test class ListSorterTest {
     private void testSortCopy() {
         List<Integer> list = new List<>(3, 4, null, 0, 2, 1);
         ListSorter sorter = ListSorter.getInstance();
-        List<Integer> copy = sorter.sortCopy(list, OrderFunctions.INTEGER);
+        List<Integer> copy = sorter.sortCopy(list, OrderFunctions.INTEGER_NULL_LAST);
 
         Assert.assertEquals(3, list.get(0));
         Assert.assertEquals(4, list.get(1));

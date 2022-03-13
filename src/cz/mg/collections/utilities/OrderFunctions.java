@@ -4,38 +4,36 @@ import cz.mg.annotations.classes.Utility;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 
-import java.util.Comparator;
-
 public @Utility class OrderFunctions {
-    public static OrderFunction BOOLEAN = (a, b) -> {
-        return nullSafeOrder((Boolean)a, (Boolean) b, Boolean::compareTo);
-    };
+    public static OrderFunction<Boolean> BOOLEAN_NULL_LAST = (a, b) -> nullSafeLast(a, b, Boolean::compareTo);
+    public static OrderFunction<Character> CHARACTER_NULL_LAST = (a, b) -> nullSafeLast(a, b, Character::compareTo);
+    public static OrderFunction<String> STRING_NULL_LAST = (a, b) -> nullSafeLast(a, b, String::compareTo);
+    public static OrderFunction<Integer> INTEGER_NULL_LAST = (a, b) -> nullSafeLast(a, b, Integer::compareTo);
+    public static OrderFunction<Long> LONG_NULL_LAST = (a, b) -> nullSafeLast(a, b, Long::compareTo);
+    public static OrderFunction<Float> FLOAT_NULL_LAST = (a, b) -> nullSafeLast(a, b, Float::compareTo);
+    public static OrderFunction<Double> DOUBLE_NULL_LAST = (a, b) -> nullSafeLast(a, b, Double::compareTo);
 
-    public static OrderFunction CHARACTER = (a, b) -> {
-        return nullSafeOrder((Character)a, (Character) b, Character::compareTo);
-    };
+    public static OrderFunction<Boolean> BOOLEAN_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Boolean::compareTo);
+    public static OrderFunction<Character> CHARACTER_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Character::compareTo);
+    public static OrderFunction<String> STRING_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, String::compareTo);
+    public static OrderFunction<Integer> INTEGER_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Integer::compareTo);
+    public static OrderFunction<Long> LONG_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Long::compareTo);
+    public static OrderFunction<Float> FLOAT_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Float::compareTo);
+    public static OrderFunction<Double> DOUBLE_NULL_FIRST = (a, b) -> nullSafeFirst(a, b, Double::compareTo);
 
-    public static OrderFunction STRING = (a, b) -> {
-        return nullSafeOrder((String)a, (String) b, String::compareTo);
-    };
+    private static <T> int nullSafeFirst(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
+        if (a == null && b == null) {
+            return 0;
+        } else if (a == null) {
+            return -1;
+        } else if (b == null) {
+            return 1;
+        } else {
+            return orderFunction.order(a, b);
+        }
+    }
 
-    public static OrderFunction INTEGER = (a, b) -> {
-        return nullSafeOrder((Integer)a, (Integer) b, Integer::compareTo);
-    };
-
-    public static OrderFunction LONG = (a, b) -> {
-        return nullSafeOrder((Long)a, (Long) b, Long::compareTo);
-    };
-
-    public static OrderFunction FLOAT = (a, b) -> {
-        return nullSafeOrder((Float)a, (Float) b, Float::compareTo);
-    };
-
-    public static OrderFunction DOUBLE = (a, b) -> {
-        return nullSafeOrder((Double)a, (Double) b, Double::compareTo);
-    };
-
-    private static <T> int nullSafeOrder(@Optional T a, @Optional T b, @Mandatory Comparator<? super T> comparator) {
+    private static <T> int nullSafeLast(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
         if (a == null && b == null) {
             return 0;
         } else if (a == null) {
@@ -43,7 +41,11 @@ public @Utility class OrderFunctions {
         } else if (b == null) {
             return -1;
         } else {
-            return comparator.compare(a, b);
+            return orderFunction.order(a, b);
         }
+    }
+
+    public interface MandatoryOrderFunction<T> {
+        int order(@Mandatory T a, @Mandatory T b);
     }
 }

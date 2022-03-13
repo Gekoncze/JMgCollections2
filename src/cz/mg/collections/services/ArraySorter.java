@@ -21,11 +21,11 @@ public @Service class ArraySorter {
     private ArraySorter() {
     }
 
-    public <T> void sort(@Mandatory Array<T> array, @Mandatory OrderFunction orderFunction) {
+    public <T> void sort(@Mandatory Array<T> array, @Mandatory OrderFunction<T> orderFunction) {
         Arrays.sort(array.getData(), orderFunction::order);
     }
 
-    public <T> @Mandatory Array<T> sortCopy(@Mandatory Array<T> array, @Mandatory OrderFunction orderFunction) {
+    public <T> @Mandatory Array<T> sortCopy(@Mandatory Array<T> array, @Mandatory OrderFunction<T> orderFunction) {
         Array<T> copy = new Array<>(array.getClazz(), array);
         sort(copy, orderFunction);
         return copy;
