@@ -8,9 +8,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>, WriteableArray<T> {
+    private final @Mandatory Class<T> clazz;
     private final T[] data;
 
     public Array(@Mandatory Class<T> clazz, int count) {
+        this.clazz = clazz;
         if(count < 0) {
             throw new IllegalArgumentException("Negative array size of " + count + ".");
         }
@@ -33,6 +35,10 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
             data[i] = item;
             i++;
         }
+    }
+
+    public @Mandatory Class<T> getClazz() {
+        return clazz;
     }
 
     public T[] getData() {
