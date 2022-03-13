@@ -4,5 +4,5 @@ import cz.mg.annotations.classes.Utility;
 import cz.mg.annotations.requirement.Optional;
 
 public @Utility interface OrderFunction {
-    int order(@Optional Object o1, @Optional Object o2);
+    int order(@Optional Object a, @Optional Object b);
 }

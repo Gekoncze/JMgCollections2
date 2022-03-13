@@ -6,5 +6,5 @@ import java.util.Objects;
 
 public @Utility class CompareFunctions {
     public static CompareFunction EQUALS = Objects::equals;
-    public static CompareFunction REFERENCE = (o1, o2) -> o1 == o2;
+    public static CompareFunction REFERENCE = (a, b) -> a == b;
 }
