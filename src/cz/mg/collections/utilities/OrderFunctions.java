@@ -45,6 +45,14 @@ public @Utility class OrderFunctions {
         }
     }
 
+    public static <T> int nullSafe(@Optional T a, @Optional T b, @Mandatory MandatoryOrderFunction<T> orderFunction) {
+        if (a == null || b == null) {
+            throw new NullPointerException();
+        } else {
+            return orderFunction.order(a, b);
+        }
+    }
+
     public interface MandatoryOrderFunction<T> {
         int order(@Mandatory T a, @Mandatory T b);
     }
