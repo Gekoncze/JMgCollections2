@@ -80,6 +80,11 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
     }
 
     @Override
+    public V getOptional(K key) {
+        return getOrDefault(key, null);
+    }
+
+    @Override
     public V getOrDefault(K key, V defaultValue) {
         int index = getIndex(key);
         MapPair<K,V> pair = array[index];

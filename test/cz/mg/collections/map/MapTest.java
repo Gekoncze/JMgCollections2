@@ -36,6 +36,7 @@ public @Test class MapTest {
     private void testGetAndSet() {
         Map<String, String> map = new Map<>(10);
         Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("key"));
+        Assert.assertEquals(null, map.getOptional("key"));
         Assert.assertEquals("my default value", map.getOrDefault("key", "my default value"));
         map.set("key", "value");
         map.set("key2", "value2");
