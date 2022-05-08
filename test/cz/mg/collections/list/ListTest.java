@@ -14,6 +14,7 @@ public @Test class ListTest {
         test.testGet();
         test.testSet();
         test.testRemove();
+        test.testRemoveItem();
         test.testClear();
         test.testIterator();
         test.testForwardIteration();
@@ -179,6 +180,48 @@ public @Test class ListTest {
         Assert.assertEquals(list.getFirstItem().get(), list.getLastItem().get());
 
         Assert.assertEquals("3", list.removeLast());
+        Assert.assertEquals(0, list.count());
+        Assert.assertEquals(true, list.isEmpty());
+        Assert.assertEquals(null, list.getFirstItem());
+        Assert.assertEquals(null, list.getLastItem());
+
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.remove(0));
+    }
+
+    private void testRemoveItem() {
+        List<String> list = new List<>(null, "1", "2", "3", "4");
+        List<String> unrelatedList = new List<>("x");
+        ListItem<String> item0 = list.getFirstItem();
+        ListItem<String> item1 = item0.getNextItem();
+        ListItem<String> item2 = item1.getNextItem();
+        ListItem<String> item3 = item2.getNextItem();
+        ListItem<String> item4 = item3.getNextItem();
+
+        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> list.remove(unrelatedList.getFirstItem()));
+        Assert.assertEquals("1", list.remove(item1));
+        Assert.assertEquals(4, list.count());
+
+        Assert.assertEquals(null, list.remove(item0));
+        Assert.assertEquals(3, list.count());
+        Assert.assertEquals("2", list.getFirst());
+        Assert.assertNotNull(list.getFirstItem());
+        Assert.assertEquals("2", list.getFirstItem().get());
+        Assert.assertEquals(null, list.getFirstItem().getPreviousItem());
+
+        Assert.assertEquals("4", list.remove(item4));
+        Assert.assertEquals(2, list.count());
+        Assert.assertEquals("2", list.getFirst());
+        Assert.assertEquals("3", list.getLast());
+        Assert.assertNotNull(list.getLastItem());
+        Assert.assertEquals("3", list.getLastItem().get());
+        Assert.assertEquals(null, list.getLastItem().getNextItem());
+
+        Assert.assertEquals("2", list.remove(item2));
+        Assert.assertEquals(1, list.count());
+        Assert.assertEquals(list.getFirstItem(), list.getLastItem());
+        Assert.assertEquals(list.getFirstItem().get(), list.getLastItem().get());
+
+        Assert.assertEquals("3", list.remove(item3));
         Assert.assertEquals(0, list.count());
         Assert.assertEquals(true, list.isEmpty());
         Assert.assertEquals(null, list.getFirstItem());

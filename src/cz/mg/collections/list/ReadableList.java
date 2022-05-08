@@ -8,6 +8,6 @@ public @Storage interface ReadableList<T> extends ReadableCollection<T> {
     T getFirst();
     T getLast();
     T get(int i);
-    @Optional ReadableListItem<T> getFirstItem();
-    @Optional ReadableListItem<T> getLastItem();
+    ReadableListItem<T> getFirstItem();
+    ReadableListItem<T> getLastItem();
 }

@@ -10,8 +10,8 @@ import java.util.NoSuchElementException;
 
 public @Storage class List<T> extends Collection<T> implements ReadableList<T>, WriteableList<T> {
     private int count;
-    private @Optional ListItem<T> firstItem;
-    private @Optional ListItem<T> lastItem;
+    private ListItem<T> firstItem;
+    private ListItem<T> lastItem;
 
     public List() {
     }
@@ -35,12 +35,12 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     }
 
     @Override
-    public @Optional ListItem<T> getFirstItem() {
+    public ListItem<T> getFirstItem() {
         return firstItem;
     }
 
     @Override
-    public @Optional ListItem<T> getLastItem() {
+    public ListItem<T> getLastItem() {
         return lastItem;
     }
 
@@ -93,11 +93,11 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     @Override
     public void addFirst(T data) {
         if(firstItem == null) {
-            firstItem = new ListItem<>(data);
+            firstItem = new ListItem<>(this, data);
             lastItem = firstItem;
         } else {
             ListItem<T> nextItem = firstItem;
-            firstItem = new ListItem<>(data);
+            firstItem = new ListItem<>(this, data);
             firstItem.setNextItem(nextItem);
             nextItem.setPreviousItem(firstItem);
         }
@@ -108,11 +108,11 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     @Override
     public void addLast(T data) {
         if(lastItem == null) {
-            lastItem = new ListItem<>(data);
+            lastItem = new ListItem<>(this, data);
             firstItem = lastItem;
         } else {
             ListItem<T> previousItem = lastItem;
-            lastItem = new ListItem<>(data);
+            lastItem = new ListItem<>(this, data);
             lastItem.setPreviousItem(previousItem);
             previousItem.setNextItem(lastItem);
         }
@@ -127,7 +127,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
         } else if(i == count) {
             addLast(data);
         } else {
-            ListItem<T> currentItem = new ListItem<>(data);
+            ListItem<T> currentItem = new ListItem<>(this, data);
             ListItem<T> nextItem = getItem(i);
             ListItem<T> previousItem = nextItem.getPreviousItem();
 
@@ -193,18 +193,22 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public T remove(int i) {
-        if(i == 0) {
+        return remove(getItem(i));
+    }
+
+    @Override
+    public T remove(@Mandatory ListItem<T> item) {
+        if (item.getList() != this) {
+            throw new IllegalArgumentException();
+        }
+
+        if(item == getFirstItem()) {
             return removeFirst();
-        } else if(i == count - 1){
+        } else if(item == getLastItem()){
             return removeLast();
         } else {
-            ListItem<T> item = getItem(i);
             ListItem<T> nextItem = item.getNextItem();
             ListItem<T> previousItem = item.getPreviousItem();
-
-            if(nextItem == null || previousItem == null) {
-                throw new NullPointerException();
-            }
 
             item.setNextItem(null);
             item.setPreviousItem(null);

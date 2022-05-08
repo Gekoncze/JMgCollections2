@@ -1,18 +1,22 @@
 package cz.mg.collections.list;
 
 import cz.mg.annotations.classes.Storage;
-import cz.mg.annotations.requirement.Optional;
+import cz.mg.annotations.requirement.Mandatory;
 
 public @Storage class ListItem<T> implements ReadableListItem<T>, WriteableListItem<T> {
+    private final @Mandatory List<T> list;
     private T data;
-    private @Optional ListItem<T> previousItem;
-    private @Optional ListItem<T> nextItem;
+    private ListItem<T> previousItem;
+    private ListItem<T> nextItem;
 
-    protected ListItem() {
+    protected ListItem(@Mandatory List<T> list, T data) {
+        this.list = list;
+        this.data = data;
     }
 
-    protected ListItem(T data) {
-        this.data = data;
+    @Override
+    public @Mandatory List<T> getList() {
+        return list;
     }
 
     @Override
@@ -26,20 +30,20 @@ public @Storage class ListItem<T> implements ReadableListItem<T>, WriteableListI
     }
 
     @Override
-    public @Optional ListItem<T> getPreviousItem() {
+    public ListItem<T> getPreviousItem() {
         return previousItem;
     }
 
-    protected void setPreviousItem(@Optional ListItem<T> previousItem) {
+    protected void setPreviousItem(ListItem<T> previousItem) {
         this.previousItem = previousItem;
     }
 
     @Override
-    public @Optional ListItem<T> getNextItem() {
+    public ListItem<T> getNextItem() {
         return nextItem;
     }
 
-    protected void setNextItem(@Optional ListItem<T> nextItem) {
+    protected void setNextItem(ListItem<T> nextItem) {
         this.nextItem = nextItem;
     }
 }

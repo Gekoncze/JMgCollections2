@@ -1,6 +1,7 @@
 package cz.mg.collections.list;
 
 import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.WriteableCollection;
 
 public @Storage interface WriteableList<T> extends WriteableCollection<T> {
@@ -13,5 +14,6 @@ public @Storage interface WriteableList<T> extends WriteableCollection<T> {
     T removeFirst();
     T removeLast();
     T remove(int i);
+    T remove(@Mandatory ListItem<T> listItem);
     void clear();
 }
