@@ -10,6 +10,7 @@ public @Test class ListTest {
         ListTest test = new ListTest();
         test.testEmpty();
         test.testAdd();
+        test.testAddCollection();
         test.testConstructors();
         test.testGet();
         test.testSet();
@@ -77,6 +78,38 @@ public @Test class ListTest {
         Assert.assertEquals(5, list.count());
         Assert.assertEquals(null, list.getLast());
         Assert.assertEquals(null, list.getLastItem().get());
+    }
+
+
+    private void testAddCollection() {
+        List<Integer> list = new List<>();
+        List<Integer> collection = new List<>(9, 1, null, 0);
+
+        Assert.assertEquals(0, list.count());
+
+        list.addCollectionLast(collection);
+
+        Assert.assertEquals(4, list.count());
+        Assert.assertEquals(9, list.get(0));
+        Assert.assertEquals(1, list.get(1));
+        Assert.assertEquals(null, list.get(2));
+        Assert.assertEquals(0, list.get(3));
+
+        list.clear();
+
+        Assert.assertEquals(0, list.count());
+        Assert.assertNull(list.getFirstItem());
+        Assert.assertNull(list.getLastItem());
+
+        list.addLast(4);
+        list.addCollectionLast(collection);
+
+        Assert.assertEquals(5, list.count());
+        Assert.assertEquals(4, list.get(0));
+        Assert.assertEquals(9, list.get(1));
+        Assert.assertEquals(1, list.get(2));
+        Assert.assertEquals(null, list.get(3));
+        Assert.assertEquals(0, list.get(4));
     }
 
 

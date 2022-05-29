@@ -146,6 +146,13 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     }
 
     @Override
+    public void addCollectionLast(@Mandatory Iterable<T> collection) {
+        for (T object : collection) {
+            addLast(object);
+        }
+    }
+
+    @Override
     public T removeFirst() {
         if(firstItem == null) {
             throw new ArrayIndexOutOfBoundsException("Missing first item.");

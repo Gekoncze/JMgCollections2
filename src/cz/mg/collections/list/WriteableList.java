@@ -11,6 +11,7 @@ public @Storage interface WriteableList<T> extends WriteableCollection<T> {
     void addFirst(T data);
     void addLast(T data);
     void add(int i, T data);
+    void addCollectionLast(@Mandatory Iterable<T> collection);
     T removeFirst();
     T removeLast();
     T remove(int i);
