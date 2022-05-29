@@ -146,7 +146,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     }
 
     @Override
-    public void addCollectionLast(@Mandatory Iterable<T> collection) {
+    public void addCollectionLast(@Mandatory Iterable<? extends T> collection) {
         for (T object : collection) {
             addLast(object);
         }
