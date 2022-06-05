@@ -1,6 +1,7 @@
 package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
+import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.pair.ReadablePair;
 import cz.mg.test.Assert;
 import cz.mg.collections.list.List;
@@ -21,6 +22,7 @@ public @Test class MapTest {
         test.testConstructors();
         test.testClear();
         test.testIterator();
+        test.testRemove();
 
         System.out.println("OK");
     }
@@ -151,6 +153,73 @@ public @Test class MapTest {
         }
 
         Assert.assertEquals(3, i);
+    }
+
+    private void testRemove() {
+        testRemove(new Map<>(1));
+        testRemove(new Map<>(2));
+        testRemove(new Map<>(3));
+        testRemove(new Map<>(5));
+        testRemove(new Map<>(7));
+        testRemove(new Map<>(10));
+        testRemove(new Map<>(50));
+        testRemove(new Map<>(100));
+    }
+
+    private void testRemove(@Mandatory Map<String, Integer> map) {
+        for (int i = 0; i < 50; i++) {
+            map.set("" + i, i);
+        }
+
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove(null));
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove("foo"));
+        Assert.assertEquals(50, map.count());
+
+        map.set(null, -1);
+        Assert.assertEquals(51, map.count());
+
+        Assert.assertEquals(-1, map.remove(null));
+        Assert.assertEquals(50, map.count());
+
+        List<String> removedKeys = new List<>();
+        testRemove(map, "0", removedKeys);
+        testRemove(map, "1", removedKeys);
+        testRemove(map, "49", removedKeys);
+        testRemove(map, "20", removedKeys);
+        testRemove(map, "19", removedKeys);
+        testRemove(map, "18", removedKeys);
+        testRemove(map, "2", removedKeys);
+        testRemove(map, "27", removedKeys);
+        testRemove(map, "48", removedKeys);
+
+        for (int i = 0; i < 50; i++) {
+            testRemove(map, "" + i, removedKeys);
+        }
+    }
+
+    private void testRemove(
+        @Mandatory Map<String, Integer> map,
+        @Mandatory String key,
+        @Mandatory List<String> removedKeys
+    ) {
+        if (removedKeys.contains(key)) {
+            Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove(key));
+            return;
+        }
+
+        int countBefore = map.count();
+        Assert.assertEquals(Integer.parseInt(key), map.remove(key));
+        Assert.assertEquals(countBefore - 1, map.count());
+        removedKeys.addLast(key);
+
+        for (int i = 0; i < 50; i++) {
+            if (removedKeys.contains("" + i)) {
+                int ii = i;
+                Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("" + ii));
+            } else {
+                Assert.assertEquals(i, map.get("" + i));
+            }
+        }
     }
 
     private static class TestClass {

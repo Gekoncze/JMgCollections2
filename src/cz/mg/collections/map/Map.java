@@ -133,8 +133,32 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
     }
 
     @Override
-    public void remove(K key) {
-        throw new UnsupportedOperationException("TODO"); // TODO
+    public V remove(K key) {
+        int index = getIndex(key);
+        ListItem<MapPair<K,V>> startingItem = array.get(index);
+
+        if (startingItem != null) {
+            ListItem<MapPair<K,V>> targetItem = findItem(key, startingItem);
+            if (targetItem != null) {
+                if (targetItem == startingItem) {
+                    ListItem<MapPair<K, V>> nextItem = targetItem.getNextItem();
+                    if (nextItem != null) {
+                        if (nextItem.get().getIndex() == index) {
+                            array.set(index, nextItem);
+                        } else {
+                            array.set(index, null);
+                        }
+                    } else {
+                        array.set(index, null);
+                    }
+                }
+                return list.remove(targetItem).getValue();
+            } else {
+                throw new NoSuchElementException();
+            }
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     private int getIndex(K key) {

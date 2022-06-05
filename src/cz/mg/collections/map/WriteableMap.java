@@ -4,6 +4,6 @@ import cz.mg.annotations.classes.Storage;
 
 public @Storage interface WriteableMap<K,V> {
     void set(K key, V value);
-    void remove(K key);
+    V remove(K key);
     void clear();
 }
