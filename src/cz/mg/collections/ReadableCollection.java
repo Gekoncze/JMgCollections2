@@ -1,10 +1,12 @@
 package cz.mg.collections;
 
 import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
+import cz.mg.collections.utilities.CompareFunction;
+import cz.mg.collections.utilities.CompareFunctions;
 
-public @Storage
-interface ReadableCollection<T> extends Iterable<T> {
+public @Storage interface ReadableCollection<T> extends Iterable<T> {
     int count();
 
     default boolean isEmpty() {
@@ -12,15 +14,13 @@ interface ReadableCollection<T> extends Iterable<T> {
     }
 
     default boolean contains(@Optional T wanted) {
-        for (T item : this) {
-            if (item == null) {
-                if (wanted == null) {
-                    return true;
-                }
-            } else {
-                if (item.equals(wanted)) {
-                    return true;
-                }
+        return contains(wanted, CompareFunctions.EQUALS);
+    }
+
+    default boolean contains(@Optional T wanted, @Mandatory CompareFunction compareFunction) {
+        for (T current : this) {
+            if (compareFunction.equals(current, wanted)) {
+                return true;
             }
         }
         return false;

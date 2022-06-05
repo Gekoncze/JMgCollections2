@@ -10,6 +10,7 @@ import cz.mg.collections.services.ListSorterTest;
 
 public @Test class AllTests {
     public static void main(String[] args) {
+        CollectionTest.main(args);
         ArrayTest.main(args);
         ListTest.main(args);
         MapTest.main(args);
