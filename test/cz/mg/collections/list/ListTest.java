@@ -14,6 +14,8 @@ public @Test class ListTest {
         test.testConstructors();
         test.testGet();
         test.testSet();
+        test.testSetFirst();
+        test.testSetLast();
         test.testRemove();
         test.testRemoveItem();
         test.testClear();
@@ -160,6 +162,38 @@ public @Test class ListTest {
         Assert.assertEquals("e", list.getLast());
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(5));
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(6));
+    }
+
+    private void testSetFirst() {
+        List<String> list = new List<>("a", "b", "c");
+
+        list.setFirst("aa");
+        Assert.assertEquals("aa", list.getFirst());
+
+        list.setFirst(null);
+        Assert.assertEquals(null, list.getFirst());
+
+        list.setFirst(null);
+        Assert.assertEquals(null, list.getFirst());
+
+        list.setFirst("aaa");
+        Assert.assertEquals("aaa", list.getFirst());
+    }
+
+    private void testSetLast() {
+        List<String> list = new List<>("a", "b", "c");
+
+        list.setLast("cc");
+        Assert.assertEquals("cc", list.getLast());
+
+        list.setLast(null);
+        Assert.assertEquals(null, list.getLast());
+
+        list.setLast(null);
+        Assert.assertEquals(null, list.getLast());
+
+        list.setLast("ccc");
+        Assert.assertEquals("ccc", list.getLast());
     }
 
     private void testSet() {
