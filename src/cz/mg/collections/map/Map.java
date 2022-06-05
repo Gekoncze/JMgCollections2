@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Storage;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
-import cz.mg.collections.pair.Pair;
+import cz.mg.collections.pair.ReadablePair;
 import cz.mg.collections.utilities.CompareFunction;
 import cz.mg.collections.utilities.CompareFunctions;
 import cz.mg.collections.utilities.HashFunction;
@@ -14,19 +14,19 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
+public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
     private final @Mandatory MapPair<K,V>[] array;
     private @Optional MapPair<K,V> first;
     private int count;
     private final @Mandatory CompareFunction compareFunction;
     private final @Mandatory HashFunction hashFunction;
 
+    @SuppressWarnings("unchecked")
     public Map(int cache, @Mandatory CompareFunction compareFunction, @Mandatory HashFunction hashFunction) {
-        if(cache < 1) {
+        if (cache < 1) {
             throw new IllegalArgumentException("Cache must be > 0.");
         }
 
-        //noinspection unchecked
         array = new MapPair[cache];
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
@@ -37,23 +37,16 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
     }
 
     @SafeVarargs
-    public Map(int cache, Pair<K,V>... pairs) {
+    public Map(int cache, ReadablePair<K,V>... pairs) {
         this(cache);
-        for(Pair<K,V> pair : pairs) {
+        for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
     }
 
-    public Map(int cache, @Mandatory Iterable<Pair<K,V>> pairs) {
+    public Map(int cache, @Mandatory Iterable<? extends ReadablePair<K,V>> pairs) {
         this(cache);
-        for(Pair<K,V> pair : pairs) {
-            set(pair.getKey(), pair.getValue());
-        }
-    }
-
-    public Map(int cache, @Mandatory Map<K,V> map) {
-        this(cache);
-        for(MapPair<K,V> pair : map) {
+        for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
     }
@@ -65,39 +58,47 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
 
     @Override
     public V get(K key) {
-        int index = getIndex(key);
-        MapPair<K,V> pair = array[index];
-
-        while(pair != null && pair.index == index) {
-            if(compareFunction.equals(key, pair.key)) {
-                return pair.value;
-            } else {
-                pair = pair.nextPair;
-            }
+        ReadablePair<K,V> pair = findPairByKey(key);
+        if (pair != null) {
+            return pair.getValue();
+        } else {
+            throw new NoSuchElementException();
         }
-
-        throw new NoSuchElementException();
     }
 
     @Override
     public V getOptional(K key) {
-        return getOrDefault(key, null);
+        ReadablePair<K,V> pair = findPairByKey(key);
+        if (pair != null) {
+            return pair.getValue();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public V getOrDefault(K key, V defaultValue) {
+        ReadablePair<K,V> pair = findPairByKey(key);
+        if (pair != null) {
+            return pair.getValue();
+        } else {
+            return defaultValue;
+        }
+    }
+
+    private @Optional ReadablePair<K,V> findPairByKey(K key) {
         int index = getIndex(key);
         MapPair<K,V> pair = array[index];
 
-        while(pair != null && pair.index == index) {
+        while (pair != null && pair.index == index) {
             if(compareFunction.equals(key, pair.key)) {
-                return pair.value;
+                return pair;
             } else {
                 pair = pair.nextPair;
             }
         }
 
-        return defaultValue;
+        return null;
     }
 
     @Override
@@ -106,10 +107,10 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
         MapPair<K,V> pair = array[index];
         MapPair<K,V> last = null;
 
-        while(pair != null && pair.index == index) {
+        while (pair != null && pair.index == index) {
             last = pair;
 
-            if(compareFunction.equals(key, pair.key)) {
+            if (compareFunction.equals(key, pair.key)) {
                 pair.value = value;
                 return;
             } else {
@@ -117,7 +118,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
             }
         }
 
-        if(last != null) {
+        if (last != null) {
             last.nextPair = new MapPair<>(key, value, index, last.nextPair);
         } else {
             first = new MapPair<>(key, value, index, first);
@@ -125,6 +126,11 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
         }
 
         count++;
+    }
+
+    @Override
+    public void remove(K key) {
+        throw new UnsupportedOperationException("TODO"); // TODO
     }
 
     private int getIndex(K key) {
@@ -139,7 +145,7 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
     }
 
     @Override
-    public @Mandatory Iterator<MapPair<K, V>> iterator() {
+    public @Mandatory Iterator<ReadablePair<K,V>> iterator() {
         return new Iterator<>() {
             private @Optional MapPair<K,V> pair = first;
 
@@ -149,8 +155,8 @@ public @Storage class Map<K,V> extends Collection<MapPair<K,V>> implements Reada
             }
 
             @Override
-            public @Mandatory MapPair<K, V> next() {
-                if(hasNext()) {
+            public @Mandatory ReadablePair<K,V> next() {
+                if (hasNext()) {
                     MapPair<K,V> result = pair;
                     pair = pair.nextPair;
                     return result;

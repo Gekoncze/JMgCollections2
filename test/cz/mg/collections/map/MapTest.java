@@ -1,6 +1,7 @@
 package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
+import cz.mg.collections.pair.ReadablePair;
 import cz.mg.test.Assert;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
@@ -144,7 +145,7 @@ public @Test class MapTest {
         Map<String, Integer> map = new Map<>(10, new Pair<>("0", 0), new Pair<>("1", 1), new Pair<>("2", 2));
 
         int i = 0;
-        for(MapPair<String, Integer> pair : map) {
+        for(ReadablePair<String, Integer> pair : map) {
             Assert.assertEquals(i, map.get("" + i));
             i++;
         }
