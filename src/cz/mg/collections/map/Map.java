@@ -4,30 +4,31 @@ import cz.mg.annotations.classes.Storage;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
+import cz.mg.collections.array.Array;
+import cz.mg.collections.list.List;
+import cz.mg.collections.list.ListItem;
 import cz.mg.collections.pair.ReadablePair;
 import cz.mg.collections.utilities.CompareFunction;
 import cz.mg.collections.utilities.CompareFunctions;
 import cz.mg.collections.utilities.HashFunction;
 import cz.mg.collections.utilities.HashFunctions;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
-    private final @Mandatory MapPair<K,V>[] array;
-    private @Optional MapPair<K,V> first;
-    private int count;
+    private final @Mandatory Array<ListItem<MapPair<K,V>>> array;
+    private final @Mandatory List<MapPair<K,V>> list;
     private final @Mandatory CompareFunction compareFunction;
     private final @Mandatory HashFunction hashFunction;
 
-    @SuppressWarnings("unchecked")
     public Map(int cache, @Mandatory CompareFunction compareFunction, @Mandatory HashFunction hashFunction) {
         if (cache < 1) {
             throw new IllegalArgumentException("Cache must be > 0.");
         }
 
-        array = new MapPair[cache];
+        this.array = createArray(cache);
+        this.list = new List<>();
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
     }
@@ -53,14 +54,14 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
 
     @Override
     public int count() {
-        return count;
+        return list.count();
     }
 
     @Override
     public V get(K key) {
-        ReadablePair<K,V> pair = findPairByKey(key);
-        if (pair != null) {
-            return pair.getValue();
+        ListItem<MapPair<K,V>> item = findItem(key);
+        if (item != null) {
+            return item.get().getValue();
         } else {
             throw new NoSuchElementException();
         }
@@ -68,9 +69,9 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
 
     @Override
     public V getOptional(K key) {
-        ReadablePair<K,V> pair = findPairByKey(key);
-        if (pair != null) {
-            return pair.getValue();
+        ListItem<MapPair<K,V>> item = findItem(key);
+        if (item != null) {
+            return item.get().getValue();
         } else {
             return null;
         }
@@ -78,23 +79,35 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
 
     @Override
     public V getOrDefault(K key, V defaultValue) {
-        ReadablePair<K,V> pair = findPairByKey(key);
-        if (pair != null) {
-            return pair.getValue();
+        ListItem<MapPair<K,V>> item = findItem(key);
+        if (item != null) {
+            return item.get().getValue();
         } else {
             return defaultValue;
         }
     }
 
-    private @Optional ReadablePair<K,V> findPairByKey(K key) {
-        int index = getIndex(key);
-        MapPair<K,V> pair = array[index];
+    private @Optional ListItem<MapPair<K,V>> findItem(K key) {
+        ListItem<MapPair<K, V>> startingItem = array.get(getIndex(key));
+        if (startingItem != null) {
+            return findItem(key, startingItem);
+        } else {
+            return null;
+        }
+    }
 
-        while (pair != null && pair.index == index) {
-            if(compareFunction.equals(key, pair.key)) {
-                return pair;
+    private @Optional ListItem<MapPair<K,V>> findItem(K key, @Mandatory ListItem<MapPair<K,V>> startingItem) {
+        int index = startingItem.get().getIndex();
+
+        for (ListItem<MapPair<K,V>> item = startingItem; item != null; item = item.getNextItem()) {
+            MapPair<K,V> pair = item.get();
+
+            if (pair.getIndex() == index) {
+                if (compareFunction.equals(key, pair.getKey())) {
+                    return item;
+                }
             } else {
-                pair = pair.nextPair;
+                break;
             }
         }
 
@@ -104,28 +117,19 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
     @Override
     public void set(K key, V value) {
         int index = getIndex(key);
-        MapPair<K,V> pair = array[index];
-        MapPair<K,V> last = null;
+        ListItem<MapPair<K,V>> startingItem = array.get(index);
 
-        while (pair != null && pair.index == index) {
-            last = pair;
-
-            if (compareFunction.equals(key, pair.key)) {
-                pair.value = value;
-                return;
+        if (startingItem != null) {
+            ListItem<MapPair<K,V>> targetItem = findItem(key, startingItem);
+            if (targetItem != null) {
+                targetItem.get().setValue(value);
             } else {
-                pair = pair.nextPair;
+                list.addNext(startingItem, new MapPair<>(key, value, index));
             }
-        }
-
-        if (last != null) {
-            last.nextPair = new MapPair<>(key, value, index, last.nextPair);
         } else {
-            first = new MapPair<>(key, value, index, first);
-            array[index] = first;
+            list.addLast(new MapPair<>(key, value, index));
+            array.set(index, list.getLastItem());
         }
-
-        count++;
     }
 
     @Override
@@ -134,36 +138,34 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
     }
 
     private int getIndex(K key) {
-        return Math.abs(hashFunction.hash(key) % array.length);
+        return Math.abs(hashFunction.hash(key) % array.count());
     }
 
     @Override
     public void clear() {
-        Arrays.fill(array, null);
-        first = null;
-        count = 0;
+        array.wipe();
+        list.clear();
     }
 
     @Override
     public @Mandatory Iterator<ReadablePair<K,V>> iterator() {
         return new Iterator<>() {
-            private @Optional MapPair<K,V> pair = first;
+            private final Iterator<MapPair<K,V>> iterator = list.iterator();
 
             @Override
             public boolean hasNext() {
-                return pair != null;
+                return iterator.hasNext();
             }
 
             @Override
-            public @Mandatory ReadablePair<K,V> next() {
-                if (hasNext()) {
-                    MapPair<K,V> result = pair;
-                    pair = pair.nextPair;
-                    return result;
-                } else {
-                    throw new NoSuchElementException();
-                }
+            public ReadablePair<K, V> next() {
+                return iterator.next();
             }
         };
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static <K,V> @Mandatory Array<ListItem<MapPair<K,V>>> createArray(int cache) {
+        return new Array(Object.class, cache);
     }
 }

@@ -1,20 +1,17 @@
 package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Storage;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.pair.ReadablePair;
 
 @Storage class MapPair<K,V> implements ReadablePair<K,V> {
-    K key;
-    V value;
-    int index;
-    @Optional MapPair<K,V> nextPair;
+    private K key;
+    private V value;
+    private int index;
 
-    MapPair(K key, V value, int index, @Optional MapPair<K,V> nextPair) {
+    MapPair(K key, V value, int index) {
         this.key = key;
         this.value = value;
         this.index = index;
-        this.nextPair = nextPair;
     }
 
     @Override
@@ -22,8 +19,24 @@ import cz.mg.collections.pair.ReadablePair;
         return key;
     }
 
+    public void setKey(K key) {
+        this.key = key;
+    }
+
     @Override
     public V getValue() {
         return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
