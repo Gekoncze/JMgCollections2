@@ -11,6 +11,8 @@ public @Test class ListTest {
         test.testEmpty();
         test.testAdd();
         test.testAddCollection();
+        test.testAddNext();
+        test.testAddPrevious();
         test.testConstructors();
         test.testGet();
         test.testSet();
@@ -80,6 +82,9 @@ public @Test class ListTest {
         Assert.assertEquals(5, list.count());
         Assert.assertEquals(null, list.getLast());
         Assert.assertEquals(null, list.getLastItem().get());
+
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.add(-1, "x"));
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.add(1000, "x"));
     }
 
 
@@ -114,6 +119,35 @@ public @Test class ListTest {
         Assert.assertEquals(0, list.get(4));
     }
 
+    private void testAddNext() {
+        List<String> list = new List<>("a");
+
+        list.addNext(list.getFirstItem(), "b");
+        Assert.assertEquals(2, list.count());
+        Assert.assertEquals("a", list.get(0));
+        Assert.assertEquals("b", list.get(1));
+
+        list.addNext(list.getFirstItem(), "foo");
+        Assert.assertEquals(3, list.count());
+        Assert.assertEquals("a", list.get(0));
+        Assert.assertEquals("foo", list.get(1));
+        Assert.assertEquals("b", list.get(2));
+    }
+
+    private void testAddPrevious() {
+        List<String> list = new List<>("z");
+
+        list.addPrevious(list.getLastItem(), "y");
+        Assert.assertEquals(2, list.count());
+        Assert.assertEquals("y", list.get(0));
+        Assert.assertEquals("z", list.get(1));
+
+        list.addPrevious(list.getLastItem(), "foo");
+        Assert.assertEquals(3, list.count());
+        Assert.assertEquals("y", list.get(0));
+        Assert.assertEquals("foo", list.get(1));
+        Assert.assertEquals("z", list.get(2));
+    }
 
     private void testConstructors() {
         List<String> list1 = new List<>("0", "1", "2");

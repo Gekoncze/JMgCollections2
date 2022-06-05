@@ -127,21 +127,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
         } else if (i == count) {
             addLast(data);
         } else {
-            ListItem<T> currentItem = new ListItem<>(this, data);
-            ListItem<T> nextItem = getItem(i);
-            ListItem<T> previousItem = nextItem.getPreviousItem();
-
-            if(previousItem == null) {
-                throw new NullPointerException();
-            }
-
-            currentItem.setNextItem(nextItem);
-            nextItem.setPreviousItem(currentItem);
-
-            currentItem.setPreviousItem(previousItem);
-            previousItem.setNextItem(currentItem);
-
-            count++;
+            addPrevious(getItem(i), data);
         }
     }
 
@@ -149,6 +135,50 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     public void addCollectionLast(@Mandatory Iterable<? extends T> collection) {
         for (T object : collection) {
             addLast(object);
+        }
+    }
+
+    @Override
+    public void addNext(@Mandatory ListItem<T> listItem, T data) {
+        if (listItem == lastItem) {
+            addLast(data);
+        } else {
+            ListItem<T> newItem = new ListItem<>(this, data);
+            ListItem<T> nextItem = listItem.getNextItem();
+
+            if (nextItem == null) {
+                throw new IllegalStateException();
+            }
+
+            newItem.setNextItem(nextItem);
+            nextItem.setPreviousItem(newItem);
+
+            newItem.setPreviousItem(listItem);
+            listItem.setNextItem(newItem);
+
+            count++;
+        }
+    }
+
+    @Override
+    public void addPrevious(@Mandatory ListItem<T> listItem, T data) {
+        if (listItem == firstItem) {
+            addFirst(data);
+        } else {
+            ListItem<T> newItem = new ListItem<>(this, data);
+            ListItem<T> previousItem = listItem.getPreviousItem();
+
+            if (previousItem == null) {
+                throw new IllegalStateException();
+            }
+
+            newItem.setNextItem(listItem);
+            listItem.setPreviousItem(newItem);
+
+            newItem.setPreviousItem(previousItem);
+            previousItem.setNextItem(newItem);
+
+            count++;
         }
     }
 
