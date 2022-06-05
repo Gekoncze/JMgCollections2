@@ -147,13 +147,19 @@ public @Test class ListTest {
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> emptyList.get(0));
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> emptyList.get(1));
 
-        List<String> list = new List<>("0", "1", "2");
+        List<String> list = new List<>("a", "b", "c", "d", "e");
 
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(-2));
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(-1));
-        Assert.assertEquals("0", list.get(0));
-        Assert.assertEquals("1", list.get(1));
-        Assert.assertEquals("2", list.get(2));
-        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(3));
+        Assert.assertEquals("a", list.getFirst());
+        Assert.assertEquals("a", list.get(0));
+        Assert.assertEquals("b", list.get(1));
+        Assert.assertEquals("c", list.get(2));
+        Assert.assertEquals("d", list.get(3));
+        Assert.assertEquals("e", list.get(4));
+        Assert.assertEquals("e", list.getLast());
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(5));
+        Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.get(6));
     }
 
     private void testSet() {

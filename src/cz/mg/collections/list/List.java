@@ -260,25 +260,54 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     }
 
     private @Mandatory ListItem<T> getItem(int i) {
-        // can be optimized - iterate from last element if i > count / 2
+        checkBounds(i);
 
-        if (i < 0 || i >= count){
-            throw new ArrayIndexOutOfBoundsException(i + " out of " + count);
+        if (i <= (count / 2)) {
+            return getItemFromFirst(i);
+        } else {
+            return getItemFromLast(i);
         }
+    }
 
+    private @Mandatory ListItem<T> getItemFromFirst(int i) {
         ListItem<T> item = firstItem;
+
         for (int j = 0; j < i; j++) {
             if (item != null) {
                 item = item.getNextItem();
             } else {
-                throw new NullPointerException();
+                throw new IllegalStateException();
             }
         }
 
         if (item != null) {
             return item;
         } else {
-            throw new NullPointerException();
+            throw new IllegalStateException();
+        }
+    }
+
+    private @Mandatory ListItem<T> getItemFromLast(int i) {
+        ListItem<T> item = lastItem;
+
+        for (int j = count - 1; j > i; j--) {
+            if (item != null) {
+                item = item.getPreviousItem();
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+
+        if (item != null) {
+            return item;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    private void checkBounds(int i) {
+        if (i < 0 || i >= count) {
+            throw new ArrayIndexOutOfBoundsException(i + " out of " + count);
         }
     }
 }
