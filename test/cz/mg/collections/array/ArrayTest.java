@@ -21,20 +21,20 @@ public @Test class ArrayTest {
     }
 
     private void testEmptyArray() {
-        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> new Array<>(String.class, -1));
-        Array<String> array = new Array<>(String.class, 0);
+        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> new Array<>(-1));
+        Array<String> array = new Array<>(0);
         Assert.assertEquals(0, array.count());
         Assert.assertEquals(true, array.isEmpty());
     }
 
     private void testNonEmptyArray() {
-        Array<String> array = new Array<>(String.class, 3);
+        Array<String> array = new Array<>(3);
         Assert.assertEquals(3, array.count());
         Assert.assertEquals(false, array.isEmpty());
     }
 
     private void testGetAndSet() {
-        Array<String> array = new Array<>(String.class, 3);
+        Array<String> array = new Array<>(3);
 
         array.set(0, "first");
         array.set(2, "last");
@@ -50,7 +50,7 @@ public @Test class ArrayTest {
     }
 
     private void testWipe() {
-        Array<String> array = new Array<>(String.class, 3);
+        Array<String> array = new Array<>(3);
         array.set(0, "first");
         array.set(1, null);
         array.set(2, "last");
@@ -67,7 +67,7 @@ public @Test class ArrayTest {
     }
 
     private void testContains() {
-        Array<String> array = new Array<>(String.class, 3);
+        Array<String> array = new Array<>(3);
         array.set(0, "first");
         array.set(1, null);
         array.set(2, "last");
@@ -91,13 +91,13 @@ public @Test class ArrayTest {
     }
 
     private void testConstructors() {
-        Array<String> array1 = new Array<>(String.class, "0", "1", "2");
+        Array<String> array1 = new Array<>("0", "1", "2");
 
         Assert.assertEquals("0", array1.get(0));
         Assert.assertEquals("1", array1.get(1));
         Assert.assertEquals("2", array1.get(2));
 
-        Array<String> array2 = new Array<>(String.class, array1);
+        Array<String> array2 = new Array<>(array1);
         array2.set(1, "11");
 
         Assert.assertEquals("0", array1.get(0));
@@ -110,7 +110,7 @@ public @Test class ArrayTest {
     }
 
     private void testIterator() {
-        Array<Integer> array = new Array<>(Integer.class, 0, 1, 2);
+        Array<Integer> array = new Array<>(0, 1, 2);
 
         int i = 0;
         for(Integer item : array) {
@@ -122,14 +122,12 @@ public @Test class ArrayTest {
     }
 
     private void testGetData() {
-        Array<String> array = new Array<>(String.class, "0", null, "2");
-        Assert.assertEquals(String[].class, array.getData().getClass());
+        Array<String> array = new Array<>("0", null, "2");
         Assert.assertEquals("0", array.getData()[0]);
         Assert.assertEquals(null, array.getData()[1]);
         Assert.assertEquals("2", array.getData()[2]);
 
-        Array<String> emptyArray = new Array<>(String.class);
-        Assert.assertEquals(String[].class, emptyArray.getData().getClass());
+        Array<String> emptyArray = new Array<>();
         Assert.assertEquals(true, emptyArray.isEmpty());
         Assert.assertEquals(0, emptyArray.getData().length);
     }

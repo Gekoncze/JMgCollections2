@@ -7,28 +7,27 @@ import cz.mg.collections.Collection;
 import java.util.Arrays;
 import java.util.Iterator;
 
+@SuppressWarnings("unchecked")
 public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>, WriteableArray<T> {
-    private final @Mandatory Class<T> clazz;
-    private final T[] data;
+    private final Object[] data;
 
-    public Array(@Mandatory Class<T> clazz, int count) {
-        this.clazz = clazz;
+    public Array(int count) {
         if (count < 0) {
-            throw new IllegalArgumentException("Negative array size of " + count + ".");
+            throw new IllegalArgumentException("Negative array size " + count + ".");
         }
-        data = createJavaArray(clazz, count);
+        data = new Object[count];
     }
 
     @SafeVarargs
-    public Array(@Mandatory Class<T> clazz, T... items) {
-        this(clazz, items.length);
+    public Array(T... items) {
+        this(items.length);
         for (int i = 0; i < items.length; i++) {
             data[i] = items[i];
         }
     }
 
-    public Array(@Mandatory Class<T> clazz, @Mandatory Iterable<? extends T> iterable) {
-        this(clazz, count(iterable));
+    public Array(@Mandatory Iterable<? extends T> iterable) {
+        this(count(iterable));
         int i = 0;
         for (T item : iterable) {
             data[i] = item;
@@ -36,11 +35,7 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
         }
     }
 
-    public @Mandatory Class<T> getClazz() {
-        return clazz;
-    }
-
-    public T[] getData() {
+    public Object[] getData() {
         return data;
     }
 
@@ -55,7 +50,7 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
 
     @Override
     public T get(int i) {
-        return data[i];
+        return (T) data[i];
     }
 
     @Override
@@ -65,7 +60,7 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
 
     @Override
     public @Mandatory Iterator<T> iterator() {
-        return Arrays.stream(data).iterator();
+        return (Iterator<T>) Arrays.stream(data).iterator();
     }
 
     private static <T> int count(@Mandatory Iterable<? extends T> iterable) {
@@ -74,10 +69,5 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
             count++;
         }
         return count;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T[] createJavaArray(@Mandatory Class<T> clazz, int count) {
-        return (T[]) java.lang.reflect.Array.newInstance(clazz, count);
     }
 }

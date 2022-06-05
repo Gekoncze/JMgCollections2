@@ -17,7 +17,7 @@ public @Test class ArraySorterTest {
     }
 
     private void testSort() {
-        Array<Integer> array = new Array<>(Integer.class, 3, 4, null, 0, 2, 1);
+        Array<Integer> array = new Array<>(3, 4, null, 0, 2, 1);
         ArraySorter sorter = ArraySorter.getInstance();
         sorter.sort(array, OrderFunctions.INTEGER_NULL_LAST);
 
@@ -30,7 +30,7 @@ public @Test class ArraySorterTest {
     }
 
     private void testSortCopy() {
-        Array<Integer> array = new Array<>(Integer.class, 3, 4, null, 0, 2, 1);
+        Array<Integer> array = new Array<>(3, 4, null, 0, 2, 1);
         ArraySorter sorter = ArraySorter.getInstance();
         Array<Integer> copy = sorter.sortCopy(array, OrderFunctions.INTEGER_NULL_LAST);
 

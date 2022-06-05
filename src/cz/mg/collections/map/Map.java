@@ -27,7 +27,7 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
             throw new IllegalArgumentException("Cache must be > 0.");
         }
 
-        this.array = createArray(cache);
+        this.array = new Array<>(cache);
         this.list = new List<>();
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
@@ -162,10 +162,5 @@ public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements 
                 return iterator.next();
             }
         };
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static <K,V> @Mandatory Array<ListItem<MapPair<K,V>>> createArray(int cache) {
-        return new Array(Object.class, cache);
     }
 }

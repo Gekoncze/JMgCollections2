@@ -21,12 +21,13 @@ public @Service class ArraySorter {
     private ArraySorter() {
     }
 
+    @SuppressWarnings("unchecked")
     public <T> void sort(@Mandatory Array<T> array, @Mandatory OrderFunction<T> orderFunction) {
-        Arrays.sort(array.getData(), orderFunction::order);
+        Arrays.sort(array.getData(), (a, b) -> orderFunction.order((T)a, (T)b));
     }
 
     public <T> @Mandatory Array<T> sortCopy(@Mandatory Array<T> array, @Mandatory OrderFunction<T> orderFunction) {
-        Array<T> copy = new Array<>(array.getClazz(), array);
+        Array<T> copy = new Array<>(array);
         sort(copy, orderFunction);
         return copy;
     }
