@@ -13,17 +13,16 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
 
     public Array(@Mandatory Class<T> clazz, int count) {
         this.clazz = clazz;
-        if(count < 0) {
+        if (count < 0) {
             throw new IllegalArgumentException("Negative array size of " + count + ".");
         }
-        //noinspection unchecked
-        data = (T[]) java.lang.reflect.Array.newInstance(clazz, count);
+        data = createJavaArray(clazz, count);
     }
 
     @SafeVarargs
     public Array(@Mandatory Class<T> clazz, T... items) {
         this(clazz, items.length);
-        for(int i = 0; i < items.length; i++) {
+        for (int i = 0; i < items.length; i++) {
             data[i] = items[i];
         }
     }
@@ -31,7 +30,7 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
     public Array(@Mandatory Class<T> clazz, @Mandatory Iterable<? extends T> iterable) {
         this(clazz, count(iterable));
         int i = 0;
-        for(T item : iterable) {
+        for (T item : iterable) {
             data[i] = item;
             i++;
         }
@@ -71,9 +70,14 @@ public @Storage class Array<T> extends Collection<T> implements ReadableArray<T>
 
     private static <T> int count(@Mandatory Iterable<? extends T> iterable) {
         int count = 0;
-        for(T ignored : iterable) {
+        for (T ignored : iterable) {
             count++;
         }
         return count;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T[] createJavaArray(@Mandatory Class<T> clazz, int count) {
+        return (T[]) java.lang.reflect.Array.newInstance(clazz, count);
     }
 }

@@ -18,13 +18,13 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @SafeVarargs
     public List(T... array) {
-        for(T item : array) {
+        for (T item : array) {
             addLast(item);
         }
     }
 
     public List(@Mandatory Iterable<? extends T> iterable) {
-        for(T item : iterable) {
+        for (T item : iterable) {
             addLast(item);
         }
     }
@@ -46,7 +46,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public T getFirst() {
-        if(firstItem != null) {
+        if (firstItem != null) {
             return firstItem.get();
         } else {
             throw new ArrayIndexOutOfBoundsException("Missing first item.");
@@ -55,7 +55,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public T getLast() {
-        if(lastItem != null) {
+        if (lastItem != null) {
             return lastItem.get();
         } else {
             throw new ArrayIndexOutOfBoundsException("Missing last item.");
@@ -69,7 +69,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public void setFirst(T data) {
-        if(firstItem != null) {
+        if (firstItem != null) {
             firstItem.set(data);
         } else {
             throw new ArrayIndexOutOfBoundsException("Missing first item.");
@@ -78,7 +78,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public void setLast(T data) {
-        if(lastItem != null) {
+        if (lastItem != null) {
             lastItem.set(data);
         } else {
             throw new ArrayIndexOutOfBoundsException("Missing last item.");
@@ -92,7 +92,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public void addFirst(T data) {
-        if(firstItem == null) {
+        if (firstItem == null) {
             firstItem = new ListItem<>(this, data);
             lastItem = firstItem;
         } else {
@@ -107,7 +107,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public void addLast(T data) {
-        if(lastItem == null) {
+        if (lastItem == null) {
             lastItem = new ListItem<>(this, data);
             firstItem = lastItem;
         } else {
@@ -122,9 +122,9 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public void add(int i, T data) {
-        if(i == 0) {
+        if (i == 0) {
             addFirst(data);
-        } else if(i == count) {
+        } else if (i == count) {
             addLast(data);
         } else {
             ListItem<T> currentItem = new ListItem<>(this, data);
@@ -154,7 +154,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public T removeFirst() {
-        if(firstItem == null) {
+        if (firstItem == null) {
             throw new ArrayIndexOutOfBoundsException("Missing first item.");
         }
 
@@ -164,7 +164,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
         firstItem = nextItem;
         item.setNextItem(null);
 
-        if(nextItem != null) {
+        if (nextItem != null) {
             nextItem.setPreviousItem(null);
         } else {
             lastItem = null;
@@ -177,7 +177,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
     @Override
     public T removeLast() {
-        if(lastItem == null) {
+        if (lastItem == null) {
             throw new ArrayIndexOutOfBoundsException("Missing last item.");
         }
 
@@ -209,9 +209,9 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
             throw new IllegalArgumentException();
         }
 
-        if(item == getFirstItem()) {
+        if (item == getFirstItem()) {
             return removeFirst();
-        } else if(item == getLastItem()){
+        } else if (item == getLastItem()){
             return removeLast();
         } else {
             ListItem<T> nextItem = item.getNextItem();
@@ -231,7 +231,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     @Override
     public void clear() {
         int count = this.count;
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             removeFirst();
         }
     }
@@ -248,7 +248,7 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
 
             @Override
             public T next() {
-                if(hasNext()) {
+                if (hasNext()) {
                     T result = current.get();
                     current = current.getNextItem();
                     return result;
@@ -262,20 +262,20 @@ public @Storage class List<T> extends Collection<T> implements ReadableList<T>, 
     private @Mandatory ListItem<T> getItem(int i) {
         // can be optimized - iterate from last element if i > count / 2
 
-        if(i < 0 || i >= count){
+        if (i < 0 || i >= count){
             throw new ArrayIndexOutOfBoundsException(i + " out of " + count);
         }
 
         ListItem<T> item = firstItem;
-        for(int j = 0; j < i; j++) {
-            if(item != null) {
+        for (int j = 0; j < i; j++) {
+            if (item != null) {
                 item = item.getNextItem();
             } else {
                 throw new NullPointerException();
             }
         }
 
-        if(item != null) {
+        if (item != null) {
             return item;
         } else {
             throw new NullPointerException();
