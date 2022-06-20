@@ -17,6 +17,7 @@ public @Storage abstract class Collection<T> implements ReadableCollection<T>, W
         int i = 0;
         for (Object o : this) {
             array[i] = o;
+            i++;
         }
 
         return array;
