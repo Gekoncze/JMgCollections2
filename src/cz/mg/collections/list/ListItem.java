@@ -1,9 +1,9 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 
-public @Storage class ListItem<T> implements ReadableListItem<T>, WriteableListItem<T> {
+public @Group class ListItem<T> implements ReadableListItem<T>, WriteableListItem<T> {
     private final @Mandatory List<T> list;
     private T data;
     private ListItem<T> previousItem;

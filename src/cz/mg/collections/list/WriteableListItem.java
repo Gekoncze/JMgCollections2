@@ -1,7 +1,7 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.classes.Group;
 
-public @Storage interface WriteableListItem<T> {
+public @Group interface WriteableListItem<T> {
     void set(T data);
 }

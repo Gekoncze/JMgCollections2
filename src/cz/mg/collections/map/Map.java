@@ -1,6 +1,6 @@
 package cz.mg.collections.map;
 
-import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
@@ -16,7 +16,7 @@ import cz.mg.collections.utilities.HashFunctions;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public @Storage class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
+public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
     private final @Mandatory Array<ListItem<MapPair<K,V>>> array;
     private final @Mandatory List<MapPair<K,V>> list;
     private final @Mandatory CompareFunction compareFunction;

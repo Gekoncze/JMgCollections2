@@ -1,12 +1,12 @@
 package cz.mg.collections;
 
-import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.utilities.CompareFunction;
 import cz.mg.collections.utilities.CompareFunctions;
 
-public @Storage interface ReadableCollection<T> extends Iterable<T> {
+public @Group interface ReadableCollection<T> extends Iterable<T> {
     int count();
 
     default boolean isEmpty() {

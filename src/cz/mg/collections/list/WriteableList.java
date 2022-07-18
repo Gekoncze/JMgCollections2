@@ -1,10 +1,10 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.WriteableCollection;
 
-public @Storage interface WriteableList<T> extends WriteableCollection<T> {
+public @Group interface WriteableList<T> extends WriteableCollection<T> {
     void setFirst(T data);
     void setLast(T data);
     void set(int i, T data);

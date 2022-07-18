@@ -1,6 +1,6 @@
 package cz.mg.collections;
 
-import cz.mg.annotations.classes.Storage;
+import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.test.Assert;
@@ -72,7 +72,7 @@ public @Test class CollectionTest {
         return new TestCollection<>(objects);
     }
 
-    private static @Storage class TestCollection<T> extends Collection<T> {
+    private static @Group class TestCollection<T> extends Collection<T> {
         private final T[] objects;
 
         @SafeVarargs
