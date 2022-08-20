@@ -7,6 +7,7 @@ import cz.mg.collections.map.MapTest;
 import cz.mg.collections.pair.PairTest;
 import cz.mg.collections.services.ArraySorterTest;
 import cz.mg.collections.services.ListSorterTest;
+import cz.mg.collections.services.StringJoinerTest;
 
 public @Test class AllTests {
     public static void main(String[] args) {
@@ -18,5 +19,6 @@ public @Test class AllTests {
 
         ArraySorterTest.main(args);
         ListSorterTest.main(args);
+        StringJoinerTest.main(args);
     }
 }
