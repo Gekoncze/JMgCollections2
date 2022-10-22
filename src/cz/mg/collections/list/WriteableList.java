@@ -11,6 +11,7 @@ public @Group interface WriteableList<T> extends WriteableCollection<T> {
     void addFirst(T data);
     void addLast(T data);
     void add(int i, T data);
+    void addCollectionFirst(@Mandatory ReadableList<? extends T> collection);
     void addCollectionLast(@Mandatory Iterable<? extends T> collection);
     void addNext(@Mandatory ListItem<T> listItem, T data);
     void addPrevious(@Mandatory ListItem<T> listItem, T data);

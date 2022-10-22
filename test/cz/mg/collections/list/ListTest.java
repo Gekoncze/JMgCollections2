@@ -10,7 +10,8 @@ public @Test class ListTest {
         ListTest test = new ListTest();
         test.testEmpty();
         test.testAdd();
-        test.testAddCollection();
+        test.testAddCollectionFirst();
+        test.testAddCollectionLast();
         test.testAddNext();
         test.testAddPrevious();
         test.testConstructors();
@@ -87,16 +88,16 @@ public @Test class ListTest {
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.add(1000, "x"));
     }
 
-
-    private void testAddCollection() {
+    private void testAddCollectionFirst() {
         List<Integer> list = new List<>();
         List<Integer> collection = new List<>(9, 1, null, 0);
 
         Assert.assertEquals(0, list.count());
 
-        list.addCollectionLast(collection);
+        list.addCollectionFirst(collection);
 
         Assert.assertEquals(4, list.count());
+
         Assert.assertEquals(9, list.get(0));
         Assert.assertEquals(1, list.get(1));
         Assert.assertEquals(null, list.get(2));
@@ -105,18 +106,52 @@ public @Test class ListTest {
         list.clear();
 
         Assert.assertEquals(0, list.count());
-        Assert.assertNull(list.getFirstItem());
-        Assert.assertNull(list.getLastItem());
 
-        list.addLast(4);
+        list.addLast(null);
+        list.addLast(44);
+        list.addCollectionFirst(collection);
+
+        Assert.assertEquals(6, list.count());
+
+        Assert.assertEquals(9, list.get(0));
+        Assert.assertEquals(1, list.get(1));
+        Assert.assertEquals(null, list.get(2));
+        Assert.assertEquals(0, list.get(3));
+        Assert.assertEquals(null, list.get(4));
+        Assert.assertEquals(44, list.get(5));
+    }
+
+    private void testAddCollectionLast() {
+        List<Integer> list = new List<>();
+        List<Integer> collection = new List<>(9, 1, null, 0);
+
+        Assert.assertEquals(0, list.count());
+
         list.addCollectionLast(collection);
 
-        Assert.assertEquals(5, list.count());
-        Assert.assertEquals(4, list.get(0));
-        Assert.assertEquals(9, list.get(1));
-        Assert.assertEquals(1, list.get(2));
-        Assert.assertEquals(null, list.get(3));
-        Assert.assertEquals(0, list.get(4));
+        Assert.assertEquals(4, list.count());
+
+        Assert.assertEquals(9, list.get(0));
+        Assert.assertEquals(1, list.get(1));
+        Assert.assertEquals(null, list.get(2));
+        Assert.assertEquals(0, list.get(3));
+
+        list.clear();
+
+        Assert.assertEquals(0, list.count());
+
+        list.addLast(44);
+        list.addLast(null);
+        list.addCollectionLast(collection);
+
+        Assert.assertEquals(6, list.count());
+
+        Assert.assertEquals(44, list.get(0));
+        Assert.assertEquals(null, list.get(1));
+        Assert.assertEquals(9, list.get(2));
+        Assert.assertEquals(1, list.get(3));
+        Assert.assertEquals(null, list.get(4));
+        Assert.assertEquals(0, list.get(5));
     }
 
     private void testAddNext() {
@@ -266,12 +301,12 @@ public @Test class ListTest {
         Assert.assertEquals(4, list.count());
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.remove(5));
 
-        Assert.assertEquals(null, list.removeFirst());
+        Assert.assertNull(list.removeFirst());
         Assert.assertEquals(3, list.count());
         Assert.assertEquals("2", list.getFirst());
         Assert.assertNotNull(list.getFirstItem());
         Assert.assertEquals("2", list.getFirstItem().get());
-        Assert.assertEquals(null, list.getFirstItem().getPreviousItem());
+        Assert.assertNull(list.getFirstItem().getPreviousItem());
 
         Assert.assertEquals("4", list.removeLast());
         Assert.assertEquals(2, list.count());
@@ -279,7 +314,7 @@ public @Test class ListTest {
         Assert.assertEquals("3", list.getLast());
         Assert.assertNotNull(list.getLastItem());
         Assert.assertEquals("3", list.getLastItem().get());
-        Assert.assertEquals(null, list.getLastItem().getNextItem());
+        Assert.assertNull(list.getLastItem().getNextItem());
 
         Assert.assertEquals("2", list.removeFirst());
         Assert.assertEquals(1, list.count());
@@ -289,8 +324,8 @@ public @Test class ListTest {
         Assert.assertEquals("3", list.removeLast());
         Assert.assertEquals(0, list.count());
         Assert.assertEquals(true, list.isEmpty());
-        Assert.assertEquals(null, list.getFirstItem());
-        Assert.assertEquals(null, list.getLastItem());
+        Assert.assertNull(list.getFirstItem());
+        Assert.assertNull(list.getLastItem());
 
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.remove(0));
     }
@@ -308,12 +343,12 @@ public @Test class ListTest {
         Assert.assertEquals("1", list.remove(item1));
         Assert.assertEquals(4, list.count());
 
-        Assert.assertEquals(null, list.remove(item0));
+        Assert.assertNull(list.remove(item0));
         Assert.assertEquals(3, list.count());
         Assert.assertEquals("2", list.getFirst());
         Assert.assertNotNull(list.getFirstItem());
         Assert.assertEquals("2", list.getFirstItem().get());
-        Assert.assertEquals(null, list.getFirstItem().getPreviousItem());
+        Assert.assertNull(list.getFirstItem().getPreviousItem());
 
         Assert.assertEquals("4", list.remove(item4));
         Assert.assertEquals(2, list.count());
@@ -321,7 +356,7 @@ public @Test class ListTest {
         Assert.assertEquals("3", list.getLast());
         Assert.assertNotNull(list.getLastItem());
         Assert.assertEquals("3", list.getLastItem().get());
-        Assert.assertEquals(null, list.getLastItem().getNextItem());
+        Assert.assertNull(list.getLastItem().getNextItem());
 
         Assert.assertEquals("2", list.remove(item2));
         Assert.assertEquals(1, list.count());
@@ -331,8 +366,8 @@ public @Test class ListTest {
         Assert.assertEquals("3", list.remove(item3));
         Assert.assertEquals(0, list.count());
         Assert.assertEquals(true, list.isEmpty());
-        Assert.assertEquals(null, list.getFirstItem());
-        Assert.assertEquals(null, list.getLastItem());
+        Assert.assertNull(list.getFirstItem());
+        Assert.assertNull(list.getLastItem());
 
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.remove(0));
     }
@@ -345,8 +380,8 @@ public @Test class ListTest {
 
         Assert.assertEquals(0, list.count());
         Assert.assertEquals(true, list.isEmpty());
-        Assert.assertEquals(null, list.getFirstItem());
-        Assert.assertEquals(null, list.getLastItem());
+        Assert.assertNull(list.getFirstItem());
+        Assert.assertNull(list.getLastItem());
     }
 
     private void testIterator() {

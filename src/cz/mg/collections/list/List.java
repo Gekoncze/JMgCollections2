@@ -132,6 +132,17 @@ public @Group class List<T> extends Collection<T> implements ReadableList<T>, Wr
     }
 
     @Override
+    public void addCollectionFirst(@Mandatory ReadableList<? extends T> collection) {
+        for (
+            ReadableListItem<? extends T> item = collection.getLastItem();
+            item != null;
+            item = item.getPreviousItem()
+        ) {
+            addFirst(item.get());
+        }
+    }
+
+    @Override
     public void addCollectionLast(@Mandatory Iterable<? extends T> collection) {
         for (T object : collection) {
             addLast(object);
