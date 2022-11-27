@@ -152,7 +152,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
                         array.set(index, null);
                     }
                 }
-                return list.remove(targetItem).getValue();
+                return list.removeItem(targetItem).getValue();
             } else {
                 throw new NoSuchElementException();
             }

@@ -3,6 +3,8 @@ package cz.mg.collections.list;
 import cz.mg.annotations.classes.Test;
 import cz.mg.test.Assert;
 
+import java.util.NoSuchElementException;
+
 public @Test class ListTest {
     public static void main(String[] args) {
         System.out.print("Running " + ListTest.class.getSimpleName() + " ... ");
@@ -21,6 +23,7 @@ public @Test class ListTest {
         test.testSetLast();
         test.testRemove();
         test.testRemoveItem();
+        test.testRemoveObject();
         test.testClear();
         test.testIterator();
         test.testForwardIteration();
@@ -339,18 +342,18 @@ public @Test class ListTest {
         ListItem<String> item3 = item2.getNextItem();
         ListItem<String> item4 = item3.getNextItem();
 
-        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> list.remove(unrelatedList.getFirstItem()));
-        Assert.assertEquals("1", list.remove(item1));
+        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> list.removeItem(unrelatedList.getFirstItem()));
+        Assert.assertEquals("1", list.removeItem(item1));
         Assert.assertEquals(4, list.count());
 
-        Assert.assertNull(list.remove(item0));
+        Assert.assertNull(list.removeItem(item0));
         Assert.assertEquals(3, list.count());
         Assert.assertEquals("2", list.getFirst());
         Assert.assertNotNull(list.getFirstItem());
         Assert.assertEquals("2", list.getFirstItem().get());
         Assert.assertNull(list.getFirstItem().getPreviousItem());
 
-        Assert.assertEquals("4", list.remove(item4));
+        Assert.assertEquals("4", list.removeItem(item4));
         Assert.assertEquals(2, list.count());
         Assert.assertEquals("2", list.getFirst());
         Assert.assertEquals("3", list.getLast());
@@ -358,18 +361,45 @@ public @Test class ListTest {
         Assert.assertEquals("3", list.getLastItem().get());
         Assert.assertNull(list.getLastItem().getNextItem());
 
-        Assert.assertEquals("2", list.remove(item2));
+        Assert.assertEquals("2", list.removeItem(item2));
         Assert.assertEquals(1, list.count());
         Assert.assertEquals(list.getFirstItem(), list.getLastItem());
         Assert.assertEquals(list.getFirstItem().get(), list.getLastItem().get());
 
-        Assert.assertEquals("3", list.remove(item3));
+        Assert.assertEquals("3", list.removeItem(item3));
         Assert.assertEquals(0, list.count());
         Assert.assertEquals(true, list.isEmpty());
         Assert.assertNull(list.getFirstItem());
         Assert.assertNull(list.getLastItem());
 
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.remove(0));
+    }
+
+    private void testRemoveObject() {
+        String first = "first";
+        String nul = null;
+        String middle = "middle";
+        String first2 = "first";
+        String last = "last";
+        List<String> list = new List<>(first, nul, middle, first2, last);
+
+        Assert.assertEquals(list.removeObject(null), null);
+        Assert.assertEquals(4, list.count());
+
+        Assert.assertEquals(list.removeObject(first), first);
+        Assert.assertEquals(3, list.count());
+
+        Assert.assertEquals(list.removeObject(first), first);
+        Assert.assertEquals(2, list.count());
+
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.removeObject(first));
+        Assert.assertEquals(2, list.count());
+
+        Assert.assertEquals(list.removeObject(middle), middle);
+        Assert.assertEquals(1, list.count());
+
+        Assert.assertEquals(list.removeObject(last), last);
+        Assert.assertEquals(0, list.count());
     }
 
     private void testClear() {

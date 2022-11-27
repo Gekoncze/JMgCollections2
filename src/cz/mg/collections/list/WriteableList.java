@@ -18,6 +18,7 @@ public @Group interface WriteableList<T> extends WriteableCollection<T> {
     T removeFirst();
     T removeLast();
     T remove(int i);
-    T remove(@Mandatory ListItem<T> listItem);
+    T removeItem(@Mandatory ListItem<T> listItem);
+    T removeObject(T data);
     void clear();
 }

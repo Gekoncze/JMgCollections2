@@ -241,11 +241,11 @@ public @Group class List<T> extends Collection<T> implements ReadableList<T>, Wr
 
     @Override
     public T remove(int i) {
-        return remove(getItem(i));
+        return removeItem(getItem(i));
     }
 
     @Override
-    public T remove(@Mandatory ListItem<T> item) {
+    public T removeItem(@Mandatory ListItem<T> item) {
         if (item.getList() != this) {
             throw new IllegalArgumentException();
         }
@@ -267,6 +267,17 @@ public @Group class List<T> extends Collection<T> implements ReadableList<T>, Wr
 
             return item.get();
         }
+    }
+
+    @Override
+    public T removeObject(T data) {
+        for (ListItem<T> item = getFirstItem(); item != null; item = item.getNextItem()) {
+            if (item.get() == data) {
+                removeItem(item);
+                return data;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     @Override
