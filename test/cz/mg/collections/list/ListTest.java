@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.test.Assert;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public @Test class ListTest {
     public static void main(String[] args) {
@@ -23,7 +24,7 @@ public @Test class ListTest {
         test.testSetLast();
         test.testRemove();
         test.testRemoveItem();
-        test.testRemoveObject();
+        test.testRemoveIf();
         test.testClear();
         test.testIterator();
         test.testForwardIteration();
@@ -375,30 +376,28 @@ public @Test class ListTest {
         Assert.assertExceptionThrown(ArrayIndexOutOfBoundsException.class, () -> list.remove(0));
     }
 
-    private void testRemoveObject() {
+    private void testRemoveIf() {
         String first = "first";
         String nul = null;
         String middle = "middle";
         String first2 = "first";
         String last = "last";
         List<String> list = new List<>(first, nul, middle, first2, last);
+        Assert.assertEquals(5, list.count());
 
-        Assert.assertEquals(list.removeObject(null), null);
+        list.removeIf(Objects::isNull);
         Assert.assertEquals(4, list.count());
 
-        Assert.assertEquals(list.removeObject(first), first);
-        Assert.assertEquals(3, list.count());
+        list.removeIf(object -> false);
+        Assert.assertEquals(4, list.count());
 
-        Assert.assertEquals(list.removeObject(first), first);
+        list.removeIf(object -> object == first);
         Assert.assertEquals(2, list.count());
 
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.removeObject(first));
+        list.removeIf(object -> object == first);
         Assert.assertEquals(2, list.count());
 
-        Assert.assertEquals(list.removeObject(middle), middle);
-        Assert.assertEquals(1, list.count());
-
-        Assert.assertEquals(list.removeObject(last), last);
+        list.removeIf(object -> true);
         Assert.assertEquals(0, list.count());
     }
 

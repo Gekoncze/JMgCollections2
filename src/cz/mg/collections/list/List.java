@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
+import cz.mg.collections.utilities.Predicate;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -270,14 +271,17 @@ public @Group class List<T> extends Collection<T> implements ReadableList<T>, Wr
     }
 
     @Override
-    public T removeObject(T data) {
-        for (ListItem<T> item = getFirstItem(); item != null; item = item.getNextItem()) {
-            if (item.get() == data) {
+    public void removeIf(@Mandatory Predicate<T> condition) {
+        ListItem<T> item = getFirstItem();
+        while (item != null) {
+            if (condition.match(item.get())) {
+                ListItem<T> nextItem = item.getNextItem();
                 removeItem(item);
-                return data;
+                item = nextItem;
+            } else {
+                item = item.getNextItem();
             }
         }
-        throw new NoSuchElementException();
     }
 
     @Override

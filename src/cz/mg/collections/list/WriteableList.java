@@ -3,6 +3,7 @@ package cz.mg.collections.list;
 import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.WriteableCollection;
+import cz.mg.collections.utilities.Predicate;
 
 public @Group interface WriteableList<T> extends WriteableCollection<T> {
     void setFirst(T data);
@@ -19,6 +20,6 @@ public @Group interface WriteableList<T> extends WriteableCollection<T> {
     T removeLast();
     T remove(int i);
     T removeItem(@Mandatory ListItem<T> listItem);
-    T removeObject(T data);
+    void removeIf(@Mandatory Predicate<T> condition);
     void clear();
 }
