@@ -385,31 +385,31 @@ public @Test class ListTest {
     private void testRemovePreviousNextItem() {
         List<String> list = new List<>(null, "1", "2", "3", "4");
 
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getFirstItem().removePreviousItem());
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getLastItem().removeNextItem());
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getFirstItem().removePrevious());
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getLastItem().removeNext());
 
-        Assert.assertEquals("2", list.getItem(3).removePreviousItem());
+        Assert.assertEquals("2", list.getItem(3).removePrevious());
         Assert.assertEquals(4, list.count());
         Assert.assertEquals(null, list.getFirst());
         Assert.assertEquals("4", list.getLast());
 
-        Assert.assertEquals("4", list.getItem(2).removeNextItem());
+        Assert.assertEquals("4", list.getItem(2).removeNext());
         Assert.assertEquals(3, list.count());
         Assert.assertEquals(null, list.getFirst());
         Assert.assertEquals("3", list.getLast());
 
-        Assert.assertEquals(null, list.getItem(1).removePreviousItem());
+        Assert.assertEquals(null, list.getItem(1).removePrevious());
         Assert.assertEquals(2, list.count());
         Assert.assertEquals("1", list.getFirst());
         Assert.assertEquals("3", list.getLast());
 
-        Assert.assertEquals("3", list.getFirstItem().removeNextItem());
+        Assert.assertEquals("3", list.getFirstItem().removeNext());
         Assert.assertEquals(1, list.count());
         Assert.assertEquals("1", list.getFirst());
         Assert.assertEquals("1", list.getLast());
 
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getFirstItem().removePreviousItem());
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getLastItem().removeNextItem());
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getFirstItem().removePrevious());
+        Assert.assertExceptionThrown(NoSuchElementException.class, () -> list.getLastItem().removeNext());
     }
 
     private void testRemoveIf() {

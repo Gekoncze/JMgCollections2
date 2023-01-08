@@ -50,7 +50,7 @@ public @Group class ListItem<T> implements ReadableListItem<T>, WriteableListIte
     }
 
     @Override
-    public T removePreviousItem() {
+    public T removePrevious() {
         if (previousItem != null) {
             return list.removeItem(previousItem);
         } else {
@@ -59,7 +59,7 @@ public @Group class ListItem<T> implements ReadableListItem<T>, WriteableListIte
     }
 
     @Override
-    public T removeNextItem() {
+    public T removeNext() {
         if (nextItem != null) {
             return list.removeItem(nextItem);
         } else {

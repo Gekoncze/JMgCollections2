@@ -4,6 +4,6 @@ import cz.mg.annotations.classes.Group;
 
 public @Group interface WriteableListItem<T> {
     void set(T data);
-    T removePreviousItem();
-    T removeNextItem();
+    T removePrevious();
+    T removeNext();
 }
