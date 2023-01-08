@@ -3,6 +3,8 @@ package cz.mg.collections.list;
 import cz.mg.annotations.classes.Group;
 import cz.mg.annotations.requirement.Mandatory;
 
+import java.util.NoSuchElementException;
+
 public @Group class ListItem<T> implements ReadableListItem<T>, WriteableListItem<T> {
     private final @Mandatory List<T> list;
     private T data;
@@ -45,5 +47,23 @@ public @Group class ListItem<T> implements ReadableListItem<T>, WriteableListIte
 
     protected void setNextItem(ListItem<T> nextItem) {
         this.nextItem = nextItem;
+    }
+
+    @Override
+    public T removePreviousItem() {
+        if (previousItem != null) {
+            return list.removeItem(previousItem);
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
+
+    @Override
+    public T removeNextItem() {
+        if (nextItem != null) {
+            return list.removeItem(nextItem);
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 }

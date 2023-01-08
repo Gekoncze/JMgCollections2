@@ -315,7 +315,8 @@ public @Group class List<T> extends Collection<T> implements ReadableList<T>, Wr
         };
     }
 
-    private @Mandatory ListItem<T> getItem(int i) {
+    @Override
+    public @Mandatory ListItem<T> getItem(int i) {
         checkBounds(i);
 
         if (i <= (count / 2)) {
