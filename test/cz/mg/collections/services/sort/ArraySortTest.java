@@ -5,11 +5,11 @@ import cz.mg.collections.array.Array;
 import cz.mg.collections.utilities.Direction;
 import cz.mg.test.Assert;
 
-public @Test class SimpleArraySortTest {
+public @Test class ArraySortTest {
     public static void main(String[] args) {
-        System.out.print("Running " + SimpleArraySortTest.class.getSimpleName() + " ... ");
+        System.out.print("Running " + ArraySortTest.class.getSimpleName() + " ... ");
 
-        SimpleArraySortTest test = new SimpleArraySortTest();
+        ArraySortTest test = new ArraySortTest();
         test.testSort();
 
         System.out.println("OK");
@@ -18,6 +18,7 @@ public @Test class SimpleArraySortTest {
     private void testSort() {
         testSort(SimpleArraySort.getInstance());
         testSort(FastArraySort.getInstance());
+        testSort(MergeArraySort.getInstance());
     }
 
     private void testSort(ArraySort sort) {

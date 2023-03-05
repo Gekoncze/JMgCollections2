@@ -11,8 +11,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public @Test class ArraySortPerformanceTest {
-    private static final ArraySort SORT = FastArraySort.getInstance();
-    private static final int ITERATIONS = 20;
+    private static final ArraySort SORT = MergeArraySort.getInstance();
+    private static final int ITERATIONS = 25;
     private static final int COUNT = 1000000;
 
     public static void main(String[] args) {

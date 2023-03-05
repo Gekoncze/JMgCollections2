@@ -5,11 +5,11 @@ import cz.mg.collections.list.List;
 import cz.mg.collections.utilities.Direction;
 import cz.mg.test.Assert;
 
-public @Test class SimpleListSortTest {
+public @Test class ListSortTest {
     public static void main(String[] args) {
-        System.out.print("Running " + SimpleListSortTest.class.getSimpleName() + " ... ");
+        System.out.print("Running " + ListSortTest.class.getSimpleName() + " ... ");
 
-        SimpleListSortTest test = new SimpleListSortTest();
+        ListSortTest test = new ListSortTest();
         test.testSort();
 
         System.out.println("OK");
@@ -18,10 +18,12 @@ public @Test class SimpleListSortTest {
     private void testSort() {
         testSort(SimpleListSort.getInstance());
         testSort(FastListSort.getInstance());
+        testSort(MergeListSort.getInstance());
     }
 
     private void testSort(ListSort sort) {
         List<Integer> list = new List<>(3, 4, null, 0, 2, 1);
+
         sort.sort(list, Integer::compareTo, Direction.ASCENDING);
 
         Assert.assertEquals(0, list.get(0));
