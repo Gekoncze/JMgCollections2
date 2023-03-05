@@ -6,30 +6,32 @@ import cz.mg.collections.array.Array;
 import cz.mg.collections.utilities.Direction;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Random;
 
 public @Test class ArraySortPerformanceTest {
-    private static final int ITERATIONS = 10;
+    private static final ArraySort SORT = FastArraySort.getInstance();
+    private static final int ITERATIONS = 20;
+    private static final int COUNT = 1000000;
 
     public static void main(String[] args) {
-        System.out.println("Running " + ArraySortPerformanceTest.class.getSimpleName() + " ... ");
+        System.out.println(
+            "Running " + ArraySortPerformanceTest.class.getSimpleName() +
+                " with " + SORT.getClass().getSimpleName() + " ... "
+        );
 
         ArraySortPerformanceTest test = new ArraySortPerformanceTest();
         test.testSortPerformance();
     }
 
     private void testSortPerformance() {
-        testSortPerformance(1);
-        testSortPerformance(10);
-        testSortPerformance(100);
-        testSortPerformance(1000);
-        testSortPerformance(10000);
+        for (int count = 1; count <= COUNT; count *= 10) {
+            testSortPerformance(count);
+        }
     }
 
     private void testSortPerformance(int count) {
-        SimpleArraySort simpleArraySort = SimpleArraySort.getInstance();
-
         long[] mgTimes = new long[ITERATIONS];
         long[] javaTimes = new long[ITERATIONS];
 
@@ -43,8 +45,8 @@ public @Test class ArraySortPerformanceTest {
 
             check(mgArray, javaArray);
 
-            mgTimes[i] = measure(() -> simpleArraySort.sort(mgArray, Integer::compareTo, Direction.ASCENDING));
-            javaTimes[i] = measure(() -> Arrays.sort(javaArray));
+            mgTimes[i] = measure(() -> SORT.sort(mgArray, Integer::compareTo, Direction.ASCENDING));
+            javaTimes[i] = measure(() -> Arrays.sort(javaArray, Comparator.comparingInt(o -> (Integer) o)));
 
             check(mgArray, javaArray);
         }

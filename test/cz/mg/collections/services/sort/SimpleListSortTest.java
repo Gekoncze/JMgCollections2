@@ -16,8 +16,12 @@ public @Test class SimpleListSortTest {
     }
 
     private void testSort() {
+        testSort(SimpleListSort.getInstance());
+        testSort(FastListSort.getInstance());
+    }
+
+    private void testSort(ListSort sort) {
         List<Integer> list = new List<>(3, 4, null, 0, 2, 1);
-        SimpleListSort sort = SimpleListSort.getInstance();
         sort.sort(list, Integer::compareTo, Direction.ASCENDING);
 
         Assert.assertEquals(0, list.get(0));
@@ -35,6 +39,5 @@ public @Test class SimpleListSortTest {
         Assert.assertEquals(2, list.get(3));
         Assert.assertEquals(1, list.get(4));
         Assert.assertEquals(0, list.get(5));
-
     }
 }

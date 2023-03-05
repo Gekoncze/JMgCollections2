@@ -16,8 +16,12 @@ public @Test class SimpleArraySortTest {
     }
 
     private void testSort() {
+        testSort(SimpleArraySort.getInstance());
+        testSort(FastArraySort.getInstance());
+    }
+
+    private void testSort(ArraySort sort) {
         Array<Integer> array = new Array<>(3, 4, null, 0, 2, 1);
-        SimpleArraySort sort = SimpleArraySort.getInstance();
 
         sort.sort(array, Integer::compare, Direction.ASCENDING);
 
