@@ -19,10 +19,10 @@ import java.util.NoSuchElementException;
 public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
     private final @Mandatory Array<ListItem<MapPair<K,V>>> array;
     private final @Mandatory List<MapPair<K,V>> list;
-    private final @Mandatory CompareFunction compareFunction;
-    private final @Mandatory HashFunction hashFunction;
+    private final @Mandatory CompareFunction<K> compareFunction;
+    private final @Mandatory HashFunction<K> hashFunction;
 
-    public Map(int cache, @Mandatory CompareFunction compareFunction, @Mandatory HashFunction hashFunction) {
+    public Map(int cache, @Mandatory CompareFunction<K> compareFunction, @Mandatory HashFunction<K> hashFunction) {
         if (cache < 1) {
             throw new IllegalArgumentException("Cache must be > 0.");
         }
@@ -34,7 +34,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
     }
 
     public Map(int cache) {
-        this(cache, CompareFunctions.EQUALS, HashFunctions.HASH_CODE);
+        this(cache, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
     }
 
     @SafeVarargs
@@ -103,7 +103,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
             MapPair<K,V> pair = item.get();
 
             if (pair.getIndex() == index) {
-                if (compareFunction.equals(key, pair.getKey())) {
+                if (compareFunction.equalsOptional(key, pair.getKey())) {
                     return item;
                 }
             } else {
@@ -162,7 +162,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
     }
 
     private int getIndex(K key) {
-        return Math.abs(hashFunction.hash(key) % array.count());
+        return Math.abs(hashFunction.hashOptional(key) % array.count());
     }
 
     @Override

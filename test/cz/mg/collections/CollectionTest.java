@@ -14,6 +14,7 @@ public @Test class CollectionTest {
         CollectionTest test = new CollectionTest();
         test.testIsEmpty();
         test.testContains();
+        test.testDebug();
 
         System.out.println("OK");
     }
@@ -70,6 +71,14 @@ public @Test class CollectionTest {
 
     private @Mandatory Collection<String> create(String... objects) {
         return new TestCollection<>(objects);
+    }
+
+    private void testDebug() {
+        Collection<String> collection = new TestCollection<>("a", "b", "c");
+        Object[] debug = collection.debug();
+        Assert.assertEquals(debug[0], "a");
+        Assert.assertEquals(debug[1], "b");
+        Assert.assertEquals(debug[2], "c");
     }
 
     private static @Group class TestCollection<T> extends Collection<T> {

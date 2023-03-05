@@ -9,6 +9,7 @@ import cz.mg.collections.pair.Pair;
 import cz.mg.collections.utilities.CompareFunctions;
 import cz.mg.collections.utilities.HashFunctions;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -115,14 +116,14 @@ public @Test class MapTest {
         TestClass k1 = new TestClass(1);
         TestClass k2 = new TestClass(1);
 
-        Map<TestClass, String> map4 = new Map<>(10, CompareFunctions.REFERENCE, HashFunctions.HASH_CODE);
+        Map<TestClass, String> map4 = new Map<>(10, CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
         map4.set(k1, "v1");
         map4.set(k2, "v2");
 
         Assert.assertEquals("v1", map4.get(k1));
         Assert.assertEquals("v2", map4.get(k2));
 
-        Map<TestClass, String> map5 = new Map<>(10, CompareFunctions.EQUALS, HashFunctions.HASH_CODE);
+        Map<TestClass, String> map5 = new Map<>(10, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
         map5.set(k1, "v1");
         map5.set(k2, "v2");
 
@@ -145,14 +146,25 @@ public @Test class MapTest {
 
     private void testIterator() {
         Map<String, Integer> map = new Map<>(10, new Pair<>("0", 0), new Pair<>("1", 1), new Pair<>("2", 2));
+        Iterator<ReadablePair<String, Integer>> iterator = map.iterator();
 
-        int i = 0;
-        for(ReadablePair<String, Integer> pair : map) {
-            Assert.assertEquals(i, map.get("" + i));
-            i++;
-        }
+        Assert.assertEquals(true, iterator.hasNext());
+        ReadablePair<String, Integer> first = iterator.next();
+        Assert.assertEquals("0", first.getKey());
+        Assert.assertEquals(0, first.getValue());
 
-        Assert.assertEquals(3, i);
+        Assert.assertEquals(true, iterator.hasNext());
+        ReadablePair<String, Integer> second = iterator.next();
+        Assert.assertEquals("1", second.getKey());
+        Assert.assertEquals(1, second.getValue());
+
+        Assert.assertEquals(true, iterator.hasNext());
+        ReadablePair<String, Integer> third = iterator.next();
+        Assert.assertEquals("2", third.getKey());
+        Assert.assertEquals(2, third.getValue());
+
+        Assert.assertEquals(false, iterator.hasNext());
+        Assert.assertExceptionThrown(NoSuchElementException.class, iterator::next);
     }
 
     private void testRemove() {

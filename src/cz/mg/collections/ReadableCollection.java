@@ -14,11 +14,19 @@ public @Group interface ReadableCollection<T> extends Iterable<T> {
     }
 
     default boolean contains(@Optional T wanted) {
-        return contains(wanted, CompareFunctions.EQUALS);
+        return contains(wanted, CompareFunctions.EQUALS());
     }
 
-    default boolean contains(@Optional T wanted, @Mandatory CompareFunction compareFunction) {
+    default boolean contains(@Optional T wanted, @Mandatory CompareFunction<T> compareFunction) {
         for (T current : this) {
+            if (current == wanted) {
+                return true;
+            }
+
+            if (current == null || wanted == null) {
+                continue;
+            }
+
             if (compareFunction.equals(current, wanted)) {
                 return true;
             }

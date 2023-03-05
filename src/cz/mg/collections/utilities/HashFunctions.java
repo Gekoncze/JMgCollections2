@@ -4,6 +4,8 @@ import cz.mg.annotations.classes.Utility;
 
 import java.util.Objects;
 
-public @Utility class HashFunctions {
-    public static HashFunction HASH_CODE = Objects::hashCode;
+public @Utility class HashFunctions<T> {
+    public static <T> HashFunction<T> HASH_CODE() {
+        return Objects::hashCode;
+    }
 }

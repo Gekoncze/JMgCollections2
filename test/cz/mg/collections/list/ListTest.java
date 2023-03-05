@@ -414,11 +414,10 @@ public @Test class ListTest {
 
     private void testRemoveIf() {
         String first = "first";
-        String nul = null;
         String middle = "middle";
         String first2 = "first";
         String last = "last";
-        List<String> list = new List<>(first, nul, middle, first2, last);
+        List<String> list = new List<>(first, null, middle, first2, last);
         Assert.assertEquals(5, list.count());
 
         list.removeIf(Objects::isNull);
