@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.utilities.Direction;
+import cz.mg.test.Performance;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,77 +14,60 @@ import java.util.Random;
 public @Test class ArraySortPerformanceTest {
     private static final ArraySort SORT = MergeArraySort.getInstance();
     private static final int ITERATIONS = 25;
-    private static final int COUNT = 1000000;
+    private static final int BASE = 100;
+    private static final int MULTIPLIER = 10;
+    private static final int LEVELS = 5;
 
     public static void main(String[] args) {
-        System.out.println(
-            "Running " + ArraySortPerformanceTest.class.getSimpleName() +
-                " with " + SORT.getClass().getSimpleName() + " ... "
-        );
+        System.out.println("Running " + ArraySortPerformanceTest.class.getSimpleName() + " ... ");
 
         ArraySortPerformanceTest test = new ArraySortPerformanceTest();
         test.testSortPerformance();
     }
 
     private void testSortPerformance() {
-        for (int count = 1; count <= COUNT; count *= 10) {
+        int count = BASE;
+        for (int level = 0; level < LEVELS; level++) {
             testSortPerformance(count);
+            count *= MULTIPLIER;
         }
     }
 
     private void testSortPerformance(int count) {
-        long[] mgTimes = new long[ITERATIONS];
-        long[] javaTimes = new long[ITERATIONS];
+        long mgTime = 0;
+        long javaTime = 0;
 
         for (int i = 0; i < ITERATIONS; i++) {
-            if (Thread.interrupted()) {
-                return;
-            }
+            Array<Integer> mgArray = generate(count, i);
+            Object[] javaArray = generate(count, i).getData();
 
-            Array<Integer> mgArray = createArray(count, i);
-            Object[] javaArray = createArray(count, i).getData();
+            compare(mgArray, javaArray);
 
-            check(mgArray, javaArray);
+            mgTime += Performance.measure(() -> SORT.sort(mgArray, Integer::compareTo, Direction.ASCENDING));
+            javaTime += Performance.measure(() -> Arrays.sort(javaArray, Comparator.comparingInt(o -> (Integer) o)));
 
-            mgTimes[i] = measure(() -> SORT.sort(mgArray, Integer::compareTo, Direction.ASCENDING));
-            javaTimes[i] = measure(() -> Arrays.sort(javaArray, Comparator.comparingInt(o -> (Integer) o)));
-
-            check(mgArray, javaArray);
+            compare(mgArray, javaArray);
         }
 
-        System.out.println("##### " + count + " #####");
-        System.out.println("Average mg time: " + average(mgTimes));
-        System.out.println("Average java time: " + average(javaTimes));
         System.out.println();
+        System.out.println("##### " + count + " #####");
+        System.out.println("Average mg time: " + mgTime / ITERATIONS);
+        System.out.println("Average java time: " + javaTime / ITERATIONS);
     }
 
-    private long average(long[] times) {
-        long sum = 0;
-        for (Long time : times) {
-            sum += time;
-        }
-        return sum / times.length;
-    }
-
-    private void check(@Mandatory Array<Integer> mgArray, @Mandatory Object[] javaArray) {
+    private void compare(@Mandatory Array<Integer> mgArray, @Mandatory Object[] javaArray) {
         if (mgArray.count() != javaArray.length) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("Results are not the same!");
         }
 
         for (int i = 0; i < mgArray.count(); i++) {
             if (!Objects.equals(mgArray.get(i), javaArray[i])) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Results are not the same!");
             }
         }
     }
 
-    private long measure(@Mandatory Runnable runnable) {
-        long start = System.currentTimeMillis();
-        runnable.run();
-        return System.currentTimeMillis() - start;
-    }
-
-    private @Mandatory Array<Integer> createArray(int count, int seed) {
+    private @Mandatory Array<Integer> generate(int count, int seed) {
         Random random = new Random(seed);
         Array<Integer> array = new Array<>(count);
         for (int i = 0; i < count; i++) {
