@@ -13,21 +13,21 @@ public @Group interface ReadableCollection<T> extends Iterable<T> {
         return count() <= 0;
     }
 
-    default boolean contains(@Optional T wanted) {
-        return contains(wanted, CompareFunctions.EQUALS());
+    default boolean contains(@Optional T value) {
+        return contains(value, CompareFunctions.EQUALS());
     }
 
-    default boolean contains(@Optional T wanted, @Mandatory CompareFunction<T> compareFunction) {
+    default boolean contains(@Optional T value, @Mandatory CompareFunction<T> compareFunction) {
         for (T current : this) {
-            if (current == wanted) {
+            if (current == value) {
                 return true;
             }
 
-            if (current == null || wanted == null) {
+            if (current == null || value == null) {
                 continue;
             }
 
-            if (compareFunction.equals(current, wanted)) {
+            if (compareFunction.equals(current, value)) {
                 return true;
             }
         }

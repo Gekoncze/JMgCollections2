@@ -8,6 +8,7 @@ import cz.mg.collections.pair.PairTest;
 import cz.mg.collections.services.*;
 import cz.mg.collections.services.sort.ArraySortTest;
 import cz.mg.collections.services.sort.ListSortTest;
+import cz.mg.collections.set.SetTest;
 
 public @Test class AllTests {
     public static void main(String[] args) {
@@ -15,6 +16,7 @@ public @Test class AllTests {
         ArrayTest.main(args);
         ListTest.main(args);
         MapTest.main(args);
+        SetTest.main(args);
         PairTest.main(args);
 
         ArraySortTest.main(args);

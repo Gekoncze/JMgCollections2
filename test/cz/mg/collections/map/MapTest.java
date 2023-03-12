@@ -77,6 +77,25 @@ public @Test class MapTest {
 
         map.set("key", "key");
         Assert.assertEquals("key", map.get("key"));
+
+        TestClass k1 = new TestClass(1);
+        TestClass k2 = new TestClass(1);
+
+        Map<TestClass, String> map2 = new Map<>(10, CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
+        map2.set(k1, "v1");
+        map2.set(k2, "v2");
+
+        Assert.assertEquals("v1", map2.get(k1));
+        Assert.assertEquals("v2", map2.get(k2));
+        Assert.assertEquals(2, map2.count());
+
+        Map<TestClass, String> map3 = new Map<>(10, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+        map3.set(k1, "v1");
+        map3.set(k2, "v2");
+
+        Assert.assertEquals("v2", map3.get(k1));
+        Assert.assertEquals("v2", map3.get(k2));
+        Assert.assertEquals(1, map3.count());
     }
 
     private void testConstructors() {
@@ -112,23 +131,6 @@ public @Test class MapTest {
         Assert.assertEquals("value1", map1.get("key1"));
         Assert.assertEquals("value2", map1.get("key2"));
         Assert.assertExceptionThrown(NoSuchElementException.class, () -> map1.get("key3"));
-
-        TestClass k1 = new TestClass(1);
-        TestClass k2 = new TestClass(1);
-
-        Map<TestClass, String> map4 = new Map<>(10, CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
-        map4.set(k1, "v1");
-        map4.set(k2, "v2");
-
-        Assert.assertEquals("v1", map4.get(k1));
-        Assert.assertEquals("v2", map4.get(k2));
-
-        Map<TestClass, String> map5 = new Map<>(10, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
-        map5.set(k1, "v1");
-        map5.set(k2, "v2");
-
-        Assert.assertEquals("v2", map5.get(k1));
-        Assert.assertEquals("v2", map5.get(k2));
     }
 
     private void testClear() {
@@ -182,6 +184,7 @@ public @Test class MapTest {
         for (int i = 0; i < 50; i++) {
             map.set("" + i, i);
         }
+        Assert.assertEquals(50, map.count());
 
         Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove(null));
         Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove("foo"));

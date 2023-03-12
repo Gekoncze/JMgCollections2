@@ -88,7 +88,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
     }
 
     private @Optional ListItem<MapPair<K,V>> findItem(K key) {
-        ListItem<MapPair<K, V>> startingItem = array.get(getIndex(key));
+        ListItem<MapPair<K, V>> startingItem = array.get(index(key));
         if (startingItem != null) {
             return findItem(key, startingItem);
         } else {
@@ -103,7 +103,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
             MapPair<K,V> pair = item.get();
 
             if (pair.getIndex() == index) {
-                if (compareFunction.equalsOptional(key, pair.getKey())) {
+                if (equals(key, pair.getKey())) {
                     return item;
                 }
             } else {
@@ -116,7 +116,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
 
     @Override
     public void set(K key, V value) {
-        int index = getIndex(key);
+        int index = index(key);
         ListItem<MapPair<K,V>> startingItem = array.get(index);
 
         if (startingItem != null) {
@@ -134,7 +134,7 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
 
     @Override
     public V remove(K key) {
-        int index = getIndex(key);
+        int index = index(key);
         ListItem<MapPair<K,V>> startingItem = array.get(index);
 
         if (startingItem != null) {
@@ -161,8 +161,12 @@ public @Group class Map<K,V> extends Collection<ReadablePair<K,V>> implements Re
         }
     }
 
-    private int getIndex(K key) {
+    private int index(K key) {
         return Math.abs(hashFunction.hashOptional(key) % array.count());
+    }
+
+    private boolean equals(K a, K b) {
+        return compareFunction.equalsOptional(a, b);
     }
 
     @Override
