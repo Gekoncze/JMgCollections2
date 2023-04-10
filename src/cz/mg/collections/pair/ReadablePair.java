@@ -1,8 +1,8 @@
 package cz.mg.collections.pair;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-public @Group interface ReadablePair<K,V> {
+public @Data interface ReadablePair<K,V> {
     K getKey();
     V getValue();
 }

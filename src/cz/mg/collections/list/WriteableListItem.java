@@ -1,8 +1,8 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-public @Group interface WriteableListItem<T> {
+public @Data interface WriteableListItem<T> {
     void set(T data);
     T removePrevious();
     T removeNext();

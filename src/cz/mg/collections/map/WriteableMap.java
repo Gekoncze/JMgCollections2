@@ -1,8 +1,8 @@
 package cz.mg.collections.map;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-public @Group interface WriteableMap<K,V> {
+public @Data interface WriteableMap<K,V> {
     void set(K key, V value);
     V remove(K key);
     void clear();

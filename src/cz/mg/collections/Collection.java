@@ -1,8 +1,8 @@
 package cz.mg.collections;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-public abstract @Group class Collection<T> implements ReadableCollection<T>, WriteableCollection<T> {
+public abstract @Data class Collection<T> implements ReadableCollection<T>, WriteableCollection<T> {
     /**
      * This method is only used for easier debugging in IDEs that do not support displaying
      * content of iterables during debugging.

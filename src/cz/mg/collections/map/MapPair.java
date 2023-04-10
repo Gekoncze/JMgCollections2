@@ -1,9 +1,9 @@
 package cz.mg.collections.map;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 import cz.mg.collections.pair.ReadablePair;
 
-@Group class MapPair<K,V> implements ReadablePair<K,V> {
+@Data class MapPair<K,V> implements ReadablePair<K,V> {
     private K key;
     private V value;
     private int index;

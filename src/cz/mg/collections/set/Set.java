@@ -1,6 +1,6 @@
 package cz.mg.collections.set;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
@@ -15,7 +15,7 @@ import cz.mg.collections.utilities.HashFunctions;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public @Group class Set<T> extends Collection<T> implements ReadableSet<T>, WriteableSet<T> {
+public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, WriteableSet<T> {
     private final @Mandatory Array<ListItem<SetItem<T>>> array;
     private final @Mandatory List<SetItem<T>> list;
     private final @Mandatory CompareFunction<T> compareFunction;

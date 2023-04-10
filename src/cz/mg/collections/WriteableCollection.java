@@ -1,6 +1,6 @@
 package cz.mg.collections;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-public @Group interface WriteableCollection<T> {
+public @Data interface WriteableCollection<T> {
 }

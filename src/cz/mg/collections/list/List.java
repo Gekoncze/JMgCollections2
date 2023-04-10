@@ -1,6 +1,6 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
@@ -9,7 +9,7 @@ import cz.mg.collections.utilities.Predicate;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public @Group class List<T> extends Collection<T> implements ReadableList<T>, WriteableList<T> {
+public @Data class List<T> extends Collection<T> implements ReadableList<T>, WriteableList<T> {
     private int count;
     private ListItem<T> firstItem;
     private ListItem<T> lastItem;

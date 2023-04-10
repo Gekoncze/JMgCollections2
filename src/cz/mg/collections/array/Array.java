@@ -1,6 +1,6 @@
 package cz.mg.collections.array;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.Collection;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
-public @Group class Array<T> extends Collection<T> implements ReadableArray<T>, WriteableArray<T> {
+public @Data class Array<T> extends Collection<T> implements ReadableArray<T>, WriteableArray<T> {
     private final Object[] data;
 
     public Array(int count) {

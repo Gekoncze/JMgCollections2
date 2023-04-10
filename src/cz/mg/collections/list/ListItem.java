@@ -1,11 +1,11 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 
 import java.util.NoSuchElementException;
 
-public @Group class ListItem<T> implements ReadableListItem<T>, WriteableListItem<T> {
+public @Data class ListItem<T> implements ReadableListItem<T>, WriteableListItem<T> {
     private final @Mandatory List<T> list;
     private T data;
     private ListItem<T> previousItem;

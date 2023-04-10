@@ -1,9 +1,9 @@
 package cz.mg.collections.list;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 import cz.mg.collections.ReadableCollection;
 
-public @Group interface ReadableList<T> extends ReadableCollection<T> {
+public @Data interface ReadableList<T> extends ReadableCollection<T> {
     T getFirst();
     T getLast();
     T get(int i);

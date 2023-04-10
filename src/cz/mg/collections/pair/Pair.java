@@ -1,8 +1,8 @@
 package cz.mg.collections.pair;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-public @Group class Pair<K,V> implements ReadablePair<K,V>, WriteablePair<K,V> {
+public @Data class Pair<K,V> implements ReadablePair<K,V>, WriteablePair<K,V> {
     private K key;
     private V value;
 

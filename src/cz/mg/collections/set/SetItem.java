@@ -1,8 +1,8 @@
 package cz.mg.collections.set;
 
-import cz.mg.annotations.classes.Group;
+import cz.mg.annotations.classes.Data;
 
-@Group class SetItem<T> {
+@Data class SetItem<T> {
     private T value;
     private int index;
 
