@@ -27,8 +27,8 @@ public @Test class SetTest {
     }
 
     private void testEmpty() {
-        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> new Set<String>(-1));
-        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> new Set<String>(0));
+        Assert.assertThatCode(() -> new Set<String>(-1)).throwsException(IllegalArgumentException.class);
+        Assert.assertThatCode(() -> new Set<String>(0)).throwsException(IllegalArgumentException.class);
 
         Set<String> map = new Set<>(1);
         Assert.assertEquals(0, map.count());
@@ -138,7 +138,7 @@ public @Test class SetTest {
         Assert.assertEquals(2, iterator.next());
 
         Assert.assertEquals(false, iterator.hasNext());
-        Assert.assertExceptionThrown(NoSuchElementException.class, iterator::next);
+        Assert.assertThatCode(iterator::next).throwsException(NoSuchElementException.class);
     }
 
     private void testRemove() {
@@ -158,14 +158,14 @@ public @Test class SetTest {
         }
         Assert.assertEquals(50, set.count());
 
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> set.remove(null));
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> set.remove(51));
+        Assert.assertThatCode(() -> set.remove(null)).throwsException(NoSuchElementException.class);
+        Assert.assertThatCode(() -> set.remove(51)).throwsException(NoSuchElementException.class);
         Assert.assertEquals(50, set.count());
 
         set.set(null);
         Assert.assertEquals(51, set.count());
 
-        Assert.assertExceptionNotThrown(() -> set.remove(null));
+        Assert.assertThatCode(() -> set.remove(null)).doesNotThrowAnyException();
         Assert.assertEquals(50, set.count());
 
         List<Integer> removedValues = new List<>();
@@ -190,12 +190,12 @@ public @Test class SetTest {
         @Mandatory List<Integer> removedValues
     ) {
         if (removedValues.contains(value)) {
-            Assert.assertExceptionThrown(NoSuchElementException.class, () -> set.remove(value));
+            Assert.assertThatCode(() -> set.remove(value)).throwsException(NoSuchElementException.class);
             return;
         }
 
         int countBefore = set.count();
-        Assert.assertExceptionNotThrown(() -> set.remove(value));
+        Assert.assertThatCode(() -> set.remove(value)).doesNotThrowAnyException();
         Assert.assertEquals(countBefore - 1, set.count());
         removedValues.addLast(value);
 

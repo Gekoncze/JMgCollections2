@@ -29,8 +29,8 @@ public @Test class MapTest {
     }
 
     private void testEmpty() {
-        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> new Map<String, String>(-1));
-        Assert.assertExceptionThrown(IllegalArgumentException.class, () -> new Map<String, String>(0));
+        Assert.assertThatCode(() -> new Map<String, String>(-1)).throwsException(IllegalArgumentException.class);
+        Assert.assertThatCode(() -> new Map<String, String>(0)).throwsException(IllegalArgumentException.class);
 
         Map<String, String> map = new Map<>(1);
         Assert.assertEquals(0, map.count());
@@ -39,12 +39,12 @@ public @Test class MapTest {
 
     private void testGetAndSet() {
         Map<String, String> map = new Map<>(10);
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("key"));
+        Assert.assertThatCode(() -> map.get("key")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(null, map.getOptional("key"));
         Assert.assertEquals("my default value", map.getOrDefault("key", "my default value"));
         map.set("key", "value");
         map.set("key2", "value2");
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("value"));
+        Assert.assertThatCode(() -> map.get("value")).throwsException(NoSuchElementException.class);
         Assert.assertEquals("value", map.get("key"));
         Assert.assertEquals("value2", map.get("key2"));
         Assert.assertEquals(false, map.isEmpty());
@@ -130,7 +130,7 @@ public @Test class MapTest {
         Assert.assertEquals(2, map1.count());
         Assert.assertEquals("value1", map1.get("key1"));
         Assert.assertEquals("value2", map1.get("key2"));
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map1.get("key3"));
+        Assert.assertThatCode(() -> map1.get("key3")).throwsException(NoSuchElementException.class);
     }
 
     private void testClear() {
@@ -142,8 +142,8 @@ public @Test class MapTest {
 
         Assert.assertEquals(true, map.isEmpty());
         Assert.assertEquals(0, map.count());
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("key"));
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("k"));
+        Assert.assertThatCode(() -> map.get("key")).throwsException(NoSuchElementException.class);
+        Assert.assertThatCode(() -> map.get("k")).throwsException(NoSuchElementException.class);
     }
 
     private void testIterator() {
@@ -166,7 +166,7 @@ public @Test class MapTest {
         Assert.assertEquals(2, third.getValue());
 
         Assert.assertEquals(false, iterator.hasNext());
-        Assert.assertExceptionThrown(NoSuchElementException.class, iterator::next);
+        Assert.assertThatCode(iterator::next).throwsException(NoSuchElementException.class);
     }
 
     private void testRemove() {
@@ -186,8 +186,8 @@ public @Test class MapTest {
         }
         Assert.assertEquals(50, map.count());
 
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove(null));
-        Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove("foo"));
+        Assert.assertThatCode(() -> map.remove(null)).throwsException(NoSuchElementException.class);
+        Assert.assertThatCode(() -> map.remove("foo")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(50, map.count());
 
         map.set(null, -1);
@@ -218,7 +218,7 @@ public @Test class MapTest {
         @Mandatory List<String> removedKeys
     ) {
         if (removedKeys.contains(key)) {
-            Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.remove(key));
+            Assert.assertThatCode(() -> map.remove(key)).throwsException(NoSuchElementException.class);
             return;
         }
 
@@ -230,7 +230,7 @@ public @Test class MapTest {
         for (int i = 0; i < 50; i++) {
             if (removedKeys.contains("" + i)) {
                 int ii = i;
-                Assert.assertExceptionThrown(NoSuchElementException.class, () -> map.get("" + ii));
+                Assert.assertThatCode(() -> map.get("" + ii)).throwsException(NoSuchElementException.class);
             } else {
                 Assert.assertEquals(i, map.get("" + i));
             }
