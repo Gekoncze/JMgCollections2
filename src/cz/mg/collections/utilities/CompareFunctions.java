@@ -1,10 +1,10 @@
 package cz.mg.collections.utilities;
 
-import cz.mg.annotations.classes.Utility;
+import cz.mg.annotations.classes.Static;
 
 import java.util.Objects;
 
-public @Utility class CompareFunctions {
+public @Static class CompareFunctions {
     public static <T> CompareFunction<T> EQUALS() {
         return Objects::equals;
     }
