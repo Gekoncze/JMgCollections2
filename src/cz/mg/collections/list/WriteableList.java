@@ -21,5 +21,6 @@ public @Data interface WriteableList<T> extends WriteableCollection<T> {
     T remove(int i);
     T removeItem(@Mandatory ListItem<T> listItem);
     void removeIf(@Mandatory Predicate<T> condition);
+    void removeItemIf(@Mandatory Predicate<ListItem<T>> condition);
     void clear();
 }

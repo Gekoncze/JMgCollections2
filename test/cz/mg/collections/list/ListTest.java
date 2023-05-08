@@ -1,6 +1,7 @@
 package cz.mg.collections.list;
 
 import cz.mg.annotations.classes.Test;
+import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.test.Assert;
 
 import java.util.NoSuchElementException;
@@ -26,6 +27,7 @@ public @Test class ListTest {
         test.testRemoveItem();
         test.testRemovePreviousNextItem();
         test.testRemoveIf();
+        test.testRemoveItemIf();
         test.testClear();
         test.testIterator();
         test.testForwardIteration();
@@ -418,23 +420,68 @@ public @Test class ListTest {
         String middle = "middle";
         String first2 = "first";
         String last = "last";
+
         List<String> list = new List<>(first, null, middle, first2, last);
-        Assert.assertEquals(5, list.count());
+        checkList(list, first, null, middle, first2, last);
 
         list.removeIf(Objects::isNull);
-        Assert.assertEquals(4, list.count());
+        checkList(list, first, middle, first2, last);
 
         list.removeIf(object -> false);
-        Assert.assertEquals(4, list.count());
+        checkList(list, first, middle, first2, last);
+
+        list.removeIf(object -> object.equals(first));
+        checkList(list, middle, last);
 
         list.removeIf(object -> object == first);
-        Assert.assertEquals(2, list.count());
-
-        list.removeIf(object -> object == first);
-        Assert.assertEquals(2, list.count());
+        checkList(list, middle, last);
 
         list.removeIf(object -> true);
-        Assert.assertEquals(0, list.count());
+        Assert.assertEquals(true, list.isEmpty());
+
+        Assert.assertThatCode(() -> {
+            list.removeIf(object -> true);
+            Assert.assertEquals(true, list.isEmpty());
+        }).doesNotThrowAnyException();
+    }
+
+    private void testRemoveItemIf() {
+        String monday = "monday";
+        String tuesday = "tuesday";
+        String wednesday = "wednesday";
+        String friday = "friday";
+
+        List<String> list = new List<>(monday, tuesday, wednesday, null, friday);
+        checkList(list, monday, tuesday, wednesday, null, friday);
+
+        list.removeItemIf(Objects::isNull);
+        checkList(list, monday, tuesday, wednesday, null, friday);
+
+        list.removeItemIf(item -> item.get() == null);
+        checkList(list, monday, tuesday, wednesday, friday);
+
+        list.removeItemIf(item -> false);
+        checkList(list, monday, tuesday, wednesday, friday);
+
+        list.removeItemIf(item -> item.get().equals("tuesday"));
+        checkList(list, monday, wednesday, friday);
+
+        list.removeItemIf(item -> item.getNextItem() != null && item.getNextItem().get().equals("friday"));
+        checkList(list, monday, friday);
+
+        list.removeItemIf(item -> true);
+        Assert.assertEquals(true, list.isEmpty());
+
+        Assert.assertThatCode(() -> {
+            list.removeItemIf(item -> true);
+            Assert.assertEquals(true, list.isEmpty());
+        }).doesNotThrowAnyException();
+    }
+
+    private void checkList(@Mandatory List<String> list, String... expectedItems) {
+        Assert
+            .assertThatCollections(new List<>(expectedItems), list)
+            .areEqual();
     }
 
     private void testClear() {

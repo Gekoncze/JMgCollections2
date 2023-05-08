@@ -272,9 +272,14 @@ public @Data class List<T> extends Collection<T> implements ReadableList<T>, Wri
 
     @Override
     public void removeIf(@Mandatory Predicate<T> condition) {
+        removeItemIf(item -> condition.match(item.get()));
+    }
+
+    @Override
+    public void removeItemIf(@Mandatory Predicate<ListItem<T>> condition) {
         ListItem<T> item = getFirstItem();
         while (item != null) {
-            if (condition.match(item.get())) {
+            if (condition.match(item)) {
                 ListItem<T> nextItem = item.getNextItem();
                 removeItem(item);
                 item = nextItem;
