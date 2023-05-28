@@ -2,7 +2,6 @@ package cz.mg.collections.services.sort;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.utilities.Direction;
 import cz.mg.collections.utilities.OrderFunction;
@@ -11,11 +10,15 @@ import java.util.Arrays;
 
 @SuppressWarnings("unchecked")
 public @Service class FastArraySort implements ArraySort {
-    private static @Optional FastArraySort instance;
+    private static volatile @Service FastArraySort instance;
 
-    public static @Mandatory FastArraySort getInstance() {
+    public static @Service FastArraySort getInstance() {
         if (instance == null) {
-            instance = new FastArraySort();
+            synchronized (Service.class) {
+                if (instance == null) {
+                    instance = new FastArraySort();
+                }
+            }
         }
         return instance;
     }

@@ -2,17 +2,20 @@ package cz.mg.collections.services.sort;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.utilities.Direction;
 import cz.mg.collections.utilities.OrderFunction;
 
 public @Service class MergeArraySort implements ArraySort {
-    private static @Optional MergeArraySort instance;
+    private static volatile @Service MergeArraySort instance;
 
-    public static @Mandatory MergeArraySort getInstance() {
+    public static @Service MergeArraySort getInstance() {
         if (instance == null) {
-            instance = new MergeArraySort();
+            synchronized (Service.class) {
+                if (instance == null) {
+                    instance = new MergeArraySort();
+                }
+            }
         }
         return instance;
     }

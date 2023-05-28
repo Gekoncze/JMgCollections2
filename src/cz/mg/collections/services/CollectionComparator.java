@@ -10,11 +10,15 @@ import cz.mg.collections.utilities.CompareFunctions;
 import java.util.Iterator;
 
 public @Service class CollectionComparator {
-    private static @Optional CollectionComparator instance;
+    private static volatile @Service CollectionComparator instance;
 
-    public static @Mandatory CollectionComparator getInstance() {
+    public static @Service CollectionComparator getInstance() {
         if (instance == null) {
-            instance = new CollectionComparator();
+            synchronized (Service.class) {
+                if (instance == null) {
+                    instance = new CollectionComparator();
+                }
+            }
         }
         return instance;
     }

@@ -9,11 +9,15 @@ import cz.mg.collections.utilities.Direction;
 import cz.mg.collections.utilities.OrderFunction;
 
 public @Service class SimpleListSort implements ListSort {
-    private static @Optional SimpleListSort instance;
+    private static volatile @Service SimpleListSort instance;
 
-    public static @Mandatory SimpleListSort getInstance() {
+    public static @Service SimpleListSort getInstance() {
         if (instance == null) {
-            instance = new SimpleListSort();
+            synchronized (Service.class) {
+                if (instance == null) {
+                    instance = new SimpleListSort();
+                }
+            }
         }
         return instance;
     }

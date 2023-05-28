@@ -2,7 +2,6 @@ package cz.mg.collections.services.sort;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
@@ -10,12 +9,16 @@ import cz.mg.collections.utilities.Direction;
 import cz.mg.collections.utilities.OrderFunction;
 
 public @Service class FastListSort implements ListSort {
-    private static @Optional FastListSort instance;
+    private static volatile @Service FastListSort instance;
 
-    public static @Mandatory FastListSort getInstance() {
+    public static @Service FastListSort getInstance() {
         if (instance == null) {
-            instance = new FastListSort();
-            instance.arraySort = FastArraySort.getInstance();
+            synchronized (Service.class) {
+                if (instance == null) {
+                    instance = new FastListSort();
+                    instance.arraySort = FastArraySort.getInstance();
+                }
+            }
         }
         return instance;
     }

@@ -2,16 +2,19 @@ package cz.mg.collections.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
 import cz.mg.collections.utilities.ToStringFunction;
 
 public @Service class StringJoiner {
-    private static @Optional StringJoiner instance;
+    private static volatile @Service StringJoiner instance;
 
-    public static @Mandatory StringJoiner getInstance() {
+    public static @Service StringJoiner getInstance() {
         if (instance == null) {
-            instance = new StringJoiner();
+            synchronized (Service.class) {
+                if (instance == null) {
+                    instance = new StringJoiner();
+                }
+            }
         }
         return instance;
     }
