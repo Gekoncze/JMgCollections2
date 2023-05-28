@@ -3,7 +3,7 @@ package cz.mg.collections.list;
 import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.WriteableCollection;
-import cz.mg.collections.coponents.Predicate;
+import cz.mg.collections.components.Predicate;
 
 public @Data interface WriteableList<T> extends WriteableCollection<T> {
     void setFirst(T data);

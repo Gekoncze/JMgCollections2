@@ -3,7 +3,7 @@ package cz.mg.collections.services;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.Collection;
-import cz.mg.collections.coponents.ToStringFunction;
+import cz.mg.collections.components.ToStringFunction;
 
 public @Service class StringJoiner {
     private static volatile @Service StringJoiner instance;

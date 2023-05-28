@@ -6,8 +6,8 @@ import cz.mg.collections.pair.ReadablePair;
 import cz.mg.test.Assert;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
-import cz.mg.collections.coponents.CompareFunctions;
-import cz.mg.collections.coponents.HashFunctions;
+import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.HashFunctions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

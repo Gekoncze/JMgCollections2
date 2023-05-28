@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
-import cz.mg.collections.coponents.Predicate;
+import cz.mg.collections.components.Predicate;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
