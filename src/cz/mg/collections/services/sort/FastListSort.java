@@ -23,7 +23,7 @@ public @Service class FastListSort implements ListSort {
         return instance;
     }
 
-    private ArraySort arraySort;
+    private @Service ArraySort arraySort;
 
     private FastListSort() {
     }

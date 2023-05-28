@@ -23,7 +23,7 @@ public @Service class MergeListSort implements ListSort {
         return instance;
     }
 
-    private ArraySort arraySort;
+    private @Service ArraySort arraySort;
 
     private MergeListSort() {
     }
