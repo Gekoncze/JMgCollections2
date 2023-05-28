@@ -1,4 +1,4 @@
-package cz.mg.collections.utilities;
+package cz.mg.collections.coponents;
 
 import cz.mg.annotations.classes.Static;
 

@@ -1,10 +1,10 @@
-package cz.mg.collections.utilities;
+package cz.mg.collections.coponents;
 
-import cz.mg.annotations.classes.Utility;
+import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 
-public @Utility interface OrderFunction<T> {
+public @Component interface OrderFunction<T> {
     int order(@Mandatory T a, @Mandatory T b);
 
     default int orderOptional(@Optional T a, @Optional T b) {

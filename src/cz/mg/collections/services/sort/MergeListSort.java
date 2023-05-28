@@ -5,8 +5,8 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
-import cz.mg.collections.utilities.Direction;
-import cz.mg.collections.utilities.OrderFunction;
+import cz.mg.collections.coponents.Direction;
+import cz.mg.collections.coponents.OrderFunction;
 
 public @Service class MergeListSort implements ListSort {
     private static volatile @Service MergeListSort instance;

@@ -3,8 +3,8 @@ package cz.mg.collections;
 import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
-import cz.mg.collections.utilities.CompareFunction;
-import cz.mg.collections.utilities.CompareFunctions;
+import cz.mg.collections.coponents.CompareFunction;
+import cz.mg.collections.coponents.CompareFunctions;
 
 public @Data interface ReadableCollection<T> extends Iterable<T> {
     int count();

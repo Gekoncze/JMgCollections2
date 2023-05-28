@@ -1,10 +1,10 @@
-package cz.mg.collections.utilities;
+package cz.mg.collections.coponents;
 
-import cz.mg.annotations.classes.Utility;
+import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 
-public @Utility interface CompareFunction<T> {
+public @Component interface CompareFunction<T> {
     boolean equals(@Mandatory T a, @Mandatory T b);
 
     default boolean equalsOptional(@Optional T a, @Optional T b) {

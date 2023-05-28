@@ -3,7 +3,7 @@ package cz.mg.collections.services.sort;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.array.Array;
-import cz.mg.collections.utilities.Direction;
+import cz.mg.collections.coponents.Direction;
 import cz.mg.test.Performance;
 
 import java.util.Arrays;

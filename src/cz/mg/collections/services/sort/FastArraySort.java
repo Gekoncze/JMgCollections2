@@ -3,12 +3,11 @@ package cz.mg.collections.services.sort;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.array.Array;
-import cz.mg.collections.utilities.Direction;
-import cz.mg.collections.utilities.OrderFunction;
+import cz.mg.collections.coponents.Direction;
+import cz.mg.collections.coponents.OrderFunction;
 
 import java.util.Arrays;
 
-@SuppressWarnings("unchecked")
 public @Service class FastArraySort implements ArraySort {
     private static volatile @Service FastArraySort instance;
 
@@ -27,6 +26,7 @@ public @Service class FastArraySort implements ArraySort {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> void sort(@Mandatory Array<T> array, @Mandatory OrderFunction<T> f, @Mandatory Direction direction) {
         if (direction == Direction.ASCENDING) {
             Arrays.sort(array.getData(), (o1, o2) -> f.orderOptional((T) o1, (T) o2));

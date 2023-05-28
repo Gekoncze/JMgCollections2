@@ -1,10 +1,10 @@
-package cz.mg.collections.utilities;
+package cz.mg.collections.coponents;
 
-import cz.mg.annotations.classes.Utility;
+import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 
-public @Utility interface HashFunction<T> {
+public @Component interface HashFunction<T> {
     int hash(@Mandatory T o);
 
     default int hashOptional(@Optional T o) {

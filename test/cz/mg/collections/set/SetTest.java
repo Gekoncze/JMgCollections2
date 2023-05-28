@@ -3,8 +3,8 @@ package cz.mg.collections.set;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.list.List;
-import cz.mg.collections.utilities.CompareFunctions;
-import cz.mg.collections.utilities.HashFunctions;
+import cz.mg.collections.coponents.CompareFunctions;
+import cz.mg.collections.coponents.HashFunctions;
 import cz.mg.test.Assert;
 
 import java.util.Iterator;

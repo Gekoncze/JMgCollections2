@@ -8,10 +8,10 @@ import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
 import cz.mg.collections.pair.ReadablePair;
-import cz.mg.collections.utilities.CompareFunction;
-import cz.mg.collections.utilities.CompareFunctions;
-import cz.mg.collections.utilities.HashFunction;
-import cz.mg.collections.utilities.HashFunctions;
+import cz.mg.collections.coponents.CompareFunction;
+import cz.mg.collections.coponents.CompareFunctions;
+import cz.mg.collections.coponents.HashFunction;
+import cz.mg.collections.coponents.HashFunctions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
