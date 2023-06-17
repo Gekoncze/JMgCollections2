@@ -2,6 +2,7 @@ package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.collections.components.Capacity;
 import cz.mg.collections.pair.ReadablePair;
 import cz.mg.test.Assert;
 import cz.mg.collections.list.List;
@@ -29,16 +30,21 @@ public @Test class MapTest {
     }
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> new Map<String, String>(-1)).throwsException(IllegalArgumentException.class);
-        Assert.assertThatCode(() -> new Map<String, String>(0)).throwsException(IllegalArgumentException.class);
+        Assert
+            .assertThatCode(() -> new Map<String, String>(new Capacity(-1)))
+            .throwsException(IllegalArgumentException.class);
 
-        Map<String, String> map = new Map<>(1);
+        Assert
+            .assertThatCode(() -> new Map<String, String>(new Capacity(0)))
+            .throwsException(IllegalArgumentException.class);
+
+        Map<String, String> map = new Map<>(new Capacity(1));
         Assert.assertEquals(0, map.count());
         Assert.assertEquals(true, map.isEmpty());
     }
 
     private void testGetAndSet() {
-        Map<String, String> map = new Map<>(10);
+        Map<String, String> map = new Map<>(new Capacity(10));
         Assert.assertThatCode(() -> map.get("key")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(null, map.getOptional("key"));
         Assert.assertEquals("my default value", map.getOrDefault("key", "my default value"));
@@ -81,7 +87,11 @@ public @Test class MapTest {
         TestClass k1 = new TestClass(1);
         TestClass k2 = new TestClass(1);
 
-        Map<TestClass, String> map2 = new Map<>(10, CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
+        Map<TestClass, String> map2 = new Map<>(
+            new Capacity(10),
+            CompareFunctions.REFERENCE(),
+            HashFunctions.HASH_CODE()
+        );
         map2.set(k1, "v1");
         map2.set(k2, "v2");
 
@@ -89,7 +99,11 @@ public @Test class MapTest {
         Assert.assertEquals("v2", map2.get(k2));
         Assert.assertEquals(2, map2.count());
 
-        Map<TestClass, String> map3 = new Map<>(10, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+        Map<TestClass, String> map3 = new Map<>(
+            new Capacity(10),
+            CompareFunctions.EQUALS(),
+            HashFunctions.HASH_CODE()
+        );
         map3.set(k1, "v1");
         map3.set(k2, "v2");
 
@@ -99,14 +113,17 @@ public @Test class MapTest {
     }
 
     private void testConstructors() {
-        Map<String, String> map1 = new Map<>(5, new Pair<>("key1", "value1"), new Pair<>("key2", "value2"));
+        Map<String, String> map1 = new Map<>(
+            new Capacity(5),
+            new Pair<>("key1", "value1"), new Pair<>("key2", "value2")
+        );
         Assert.assertEquals(2, map1.count());
         Assert.assertEquals(false, map1.isEmpty());
         Assert.assertEquals("value1", map1.get("key1"));
         Assert.assertEquals("value2", map1.get("key2"));
 
         List<Pair<String, String>> pairs = new List<>(new Pair<>("k1", "v1"), new Pair<>("k2", "v2"));
-        Map<String, String> map2 = new Map<>(5, pairs);
+        Map<String, String> map2 = new Map<>(new Capacity(5), pairs);
         Assert.assertEquals(false, map2.isEmpty());
 
         map2.set("k1", null);
@@ -117,7 +134,7 @@ public @Test class MapTest {
         Assert.assertEquals("k1", pairs.getFirst().getKey());
         Assert.assertEquals("v1", pairs.getFirst().getValue());
 
-        Map<String, String> map3 = new Map<>(5, map1);
+        Map<String, String> map3 = new Map<>(new Capacity(5), map1);
         Assert.assertEquals(false, map3.isEmpty());
 
         map3.set("key1", "value1x");
@@ -134,7 +151,11 @@ public @Test class MapTest {
     }
 
     private void testClear() {
-        Map<String, String> map = new Map<>(5, new Pair<>("key", "value"), new Pair<>("k", "v"));
+        Map<String, String> map = new Map<>(
+            new Capacity(5),
+            new Pair<>("key", "value"),
+            new Pair<>("k", "v")
+        );
         Assert.assertEquals(false, map.isEmpty());
         Assert.assertEquals(2, map.count());
 
@@ -147,7 +168,10 @@ public @Test class MapTest {
     }
 
     private void testIterator() {
-        Map<String, Integer> map = new Map<>(10, new Pair<>("0", 0), new Pair<>("1", 1), new Pair<>("2", 2));
+        Map<String, Integer> map = new Map<>(
+            new Capacity(10),
+            new Pair<>("0", 0), new Pair<>("1", 1), new Pair<>("2", 2)
+        );
         Iterator<ReadablePair<String, Integer>> iterator = map.iterator();
 
         Assert.assertEquals(true, iterator.hasNext());
@@ -170,14 +194,14 @@ public @Test class MapTest {
     }
 
     private void testRemove() {
-        testRemove(new Map<>(1));
-        testRemove(new Map<>(2));
-        testRemove(new Map<>(3));
-        testRemove(new Map<>(5));
-        testRemove(new Map<>(7));
-        testRemove(new Map<>(10));
-        testRemove(new Map<>(50));
-        testRemove(new Map<>(100));
+        testRemove(new Map<>(new Capacity(1)));
+        testRemove(new Map<>(new Capacity(2)));
+        testRemove(new Map<>(new Capacity(3)));
+        testRemove(new Map<>(new Capacity(5)));
+        testRemove(new Map<>(new Capacity(7)));
+        testRemove(new Map<>(new Capacity(10)));
+        testRemove(new Map<>(new Capacity(50)));
+        testRemove(new Map<>(new Capacity(100)));
     }
 
     private void testRemove(@Mandatory Map<String, Integer> map) {

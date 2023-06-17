@@ -5,13 +5,10 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
 import cz.mg.collections.array.Array;
+import cz.mg.collections.components.*;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
 import cz.mg.collections.pair.ReadablePair;
-import cz.mg.collections.components.CompareFunction;
-import cz.mg.collections.components.CompareFunctions;
-import cz.mg.collections.components.HashFunction;
-import cz.mg.collections.components.HashFunctions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -22,31 +19,35 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
     private final @Mandatory CompareFunction<K> compareFunction;
     private final @Mandatory HashFunction<K> hashFunction;
 
-    public Map(int cache, @Mandatory CompareFunction<K> compareFunction, @Mandatory HashFunction<K> hashFunction) {
-        if (cache < 1) {
-            throw new IllegalArgumentException("Cache must be > 0.");
+    public Map(
+        @Mandatory Capacity capacity,
+        @Mandatory CompareFunction<K> compareFunction,
+        @Mandatory HashFunction<K> hashFunction
+    ) {
+        if (capacity.getValue() < 1) {
+            throw new IllegalArgumentException("Capacity must be > 0.");
         }
 
-        this.array = new Array<>(cache);
+        this.array = new Array<>(capacity.getValue());
         this.list = new List<>();
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
     }
 
-    public Map(int cache) {
-        this(cache, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+    public Map(@Mandatory Capacity capacity) {
+        this(capacity, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
     }
 
     @SafeVarargs
-    public Map(int cache, ReadablePair<K,V>... pairs) {
-        this(cache);
+    public Map(@Mandatory Capacity capacity, ReadablePair<K,V>... pairs) {
+        this(capacity);
         for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
     }
 
-    public Map(int cache, @Mandatory Iterable<? extends ReadablePair<K,V>> pairs) {
-        this(cache);
+    public Map(@Mandatory Capacity capacity, @Mandatory Iterable<? extends ReadablePair<K,V>> pairs) {
+        this(capacity);
         for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }

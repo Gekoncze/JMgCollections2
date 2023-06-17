@@ -2,6 +2,7 @@ package cz.mg.collections.set;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.collections.components.Capacity;
 import cz.mg.collections.list.List;
 import cz.mg.collections.components.CompareFunctions;
 import cz.mg.collections.components.HashFunctions;
@@ -27,16 +28,21 @@ public @Test class SetTest {
     }
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> new Set<String>(-1)).throwsException(IllegalArgumentException.class);
-        Assert.assertThatCode(() -> new Set<String>(0)).throwsException(IllegalArgumentException.class);
+        Assert
+            .assertThatCode(() -> new Set<String>(new Capacity(-1)))
+            .throwsException(IllegalArgumentException.class);
 
-        Set<String> map = new Set<>(1);
+        Assert
+            .assertThatCode(() -> new Set<String>(new Capacity(0)))
+            .throwsException(IllegalArgumentException.class);
+
+        Set<String> map = new Set<>(new Capacity(1));
         Assert.assertEquals(0, map.count());
         Assert.assertEquals(true, map.isEmpty());
     }
 
     private void testContainsAndSet() {
-        Set<String> set = new Set<>(10);
+        Set<String> set = new Set<>(new Capacity(10));
         Assert.assertEquals(false, set.contains("value"));
         set.set("value");
         Assert.assertEquals(true, set.contains("value"));
@@ -70,7 +76,7 @@ public @Test class SetTest {
         TestClass v1 = new TestClass(1);
         TestClass v2 = new TestClass(1);
 
-        Set<TestClass> set2 = new Set<>(10, CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
+        Set<TestClass> set2 = new Set<>(new Capacity(10), CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
         set2.set(v1);
         set2.set(v2);
 
@@ -78,7 +84,7 @@ public @Test class SetTest {
         Assert.assertEquals(true, set2.contains(v2));
         Assert.assertEquals(2, set2.count());
 
-        Set<TestClass> set3 = new Set<>(10, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+        Set<TestClass> set3 = new Set<>(new Capacity(10), CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
         set3.set(v1);
         set3.set(v2);
 
@@ -88,7 +94,7 @@ public @Test class SetTest {
     }
 
     private void testConstructors() {
-        Set<String> set1 = new Set<>(5, "value1", "value2", null);
+        Set<String> set1 = new Set<>(new Capacity(5), "value1", "value2", null);
         Assert.assertEquals(3, set1.count());
         Assert.assertEquals(false, set1.isEmpty());
         Assert.assertEquals(true, set1.contains("value1"));
@@ -96,14 +102,14 @@ public @Test class SetTest {
         Assert.assertEquals(true, set1.contains(null));
 
         List<String> listValues = new List<>("v1", "v2", null);
-        Set<String> set2 = new Set<>(5, listValues);
+        Set<String> set2 = new Set<>(new Capacity(5), listValues);
         Assert.assertEquals(3, set2.count());
         Assert.assertEquals(false, set2.isEmpty());
         Assert.assertEquals(true, set2.contains("v1"));
         Assert.assertEquals(true, set2.contains("v2"));
         Assert.assertEquals(true, set2.contains(null));
 
-        Set<String> map3 = new Set<>(5, set1);
+        Set<String> map3 = new Set<>(new Capacity(5), set1);
         Assert.assertEquals(3, set2.count());
         Assert.assertEquals(false, map3.isEmpty());
         Assert.assertEquals(true, set1.contains("value1"));
@@ -112,7 +118,7 @@ public @Test class SetTest {
     }
 
     private void testClear() {
-        Set<String> set = new Set<>(5, "value", "v");
+        Set<String> set = new Set<>(new Capacity(5), "value", "v");
         Assert.assertEquals(false, set.isEmpty());
         Assert.assertEquals(2, set.count());
 
@@ -125,7 +131,7 @@ public @Test class SetTest {
     }
 
     private void testIterator() {
-        Set<Integer> set = new Set<>(10, 0, 1, 2);
+        Set<Integer> set = new Set<>(new Capacity(10), 0, 1, 2);
         Iterator<Integer> iterator = set.iterator();
 
         Assert.assertEquals(true, iterator.hasNext());
@@ -142,14 +148,14 @@ public @Test class SetTest {
     }
 
     private void testRemove() {
-        testRemove(new Set<>(1));
-        testRemove(new Set<>(2));
-        testRemove(new Set<>(3));
-        testRemove(new Set<>(5));
-        testRemove(new Set<>(7));
-        testRemove(new Set<>(10));
-        testRemove(new Set<>(50));
-        testRemove(new Set<>(100));
+        testRemove(new Set<>(new Capacity(1)));
+        testRemove(new Set<>(new Capacity(2)));
+        testRemove(new Set<>(new Capacity(3)));
+        testRemove(new Set<>(new Capacity(5)));
+        testRemove(new Set<>(new Capacity(7)));
+        testRemove(new Set<>(new Capacity(10)));
+        testRemove(new Set<>(new Capacity(50)));
+        testRemove(new Set<>(new Capacity(100)));
     }
 
     private void testRemove(@Mandatory Set<Integer> set) {

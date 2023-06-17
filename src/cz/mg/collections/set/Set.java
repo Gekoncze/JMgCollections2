@@ -5,12 +5,9 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
 import cz.mg.collections.array.Array;
+import cz.mg.collections.components.*;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
-import cz.mg.collections.components.CompareFunction;
-import cz.mg.collections.components.CompareFunctions;
-import cz.mg.collections.components.HashFunction;
-import cz.mg.collections.components.HashFunctions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -21,31 +18,35 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
     private final @Mandatory CompareFunction<T> compareFunction;
     private final @Mandatory HashFunction<T> hashFunction;
 
-    public Set(int cache, @Mandatory CompareFunction<T> compareFunction, @Mandatory HashFunction<T> hashFunction) {
-        if (cache < 1) {
+    public Set(
+        @Mandatory Capacity capacity,
+        @Mandatory CompareFunction<T> compareFunction,
+        @Mandatory HashFunction<T> hashFunction
+    ) {
+        if (capacity.getValue() < 1) {
             throw new IllegalArgumentException("Cache must be > 0.");
         }
 
-        this.array = new Array<>(cache);
+        this.array = new Array<>(capacity.getValue());
         this.list = new List<>();
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
     }
 
-    public Set(int cache) {
-        this(cache, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+    public Set(@Mandatory Capacity capacity) {
+        this(capacity, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
     }
 
     @SafeVarargs
-    public Set(int cache, T... values) {
-        this(cache);
+    public Set(@Mandatory Capacity capacity, T... values) {
+        this(capacity);
         for (T value : values) {
             set(value);
         }
     }
 
-    public Set(int cache, @Mandatory Iterable<? extends T> values) {
-        this(cache);
+    public Set(@Mandatory Capacity capacity, @Mandatory Iterable<? extends T> values) {
+        this(capacity);
         for (T value : values) {
             set(value);
         }
