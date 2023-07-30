@@ -21,6 +21,7 @@ public @Test class MapTest {
         MapTest test = new MapTest();
         test.testEmpty();
         test.testGetAndSet();
+        test.testGetOrCreate();
         test.testConstructors();
         test.testClear();
         test.testIterator();
@@ -47,7 +48,7 @@ public @Test class MapTest {
         Map<String, String> map = new Map<>(new Capacity(10));
         Assert.assertThatCode(() -> map.get("key")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(null, map.getOptional("key"));
-        Assert.assertEquals("my default value", map.getOrDefault("key", "my default value"));
+        Assert.assertEquals("my default value", map.getOptional("key", "my default value"));
         map.set("key", "value");
         map.set("key2", "value2");
         Assert.assertThatCode(() -> map.get("value")).throwsException(NoSuchElementException.class);
@@ -110,6 +111,19 @@ public @Test class MapTest {
         Assert.assertEquals("v2", map3.get(k1));
         Assert.assertEquals("v2", map3.get(k2));
         Assert.assertEquals(1, map3.count());
+    }
+
+    private void testGetOrCreate() {
+        Map<Long, Pair<Long, Long>> map = new Map<>(new Capacity(10));
+        Assert.assertEquals(true, map.isEmpty());
+        Pair<Long, Long> pair = map.getOrCreate(1L, Pair::new);
+        Assert.assertEquals(false, map.isEmpty());
+        Assert.assertEquals(null, pair.getKey());
+        Assert.assertEquals(null, pair.getValue());
+        pair.setKey(7L);
+        pair.setValue(77L);
+        Assert.assertEquals(7L, map.getOrCreate(1L, Pair::new).getKey());
+        Assert.assertEquals(77L, map.getOrCreate(1L, Pair::new).getValue());
     }
 
     private void testConstructors() {

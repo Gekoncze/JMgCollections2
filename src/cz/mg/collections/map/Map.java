@@ -70,21 +70,28 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
 
     @Override
     public V getOptional(K key) {
-        ListItem<MapPair<K,V>> item = findItem(key);
-        if (item != null) {
-            return item.get().getValue();
-        } else {
-            return null;
-        }
+        return getOptional(key, null);
     }
 
     @Override
-    public V getOrDefault(K key, V defaultValue) {
+    public V getOptional(K key, V defaultValue) {
         ListItem<MapPair<K,V>> item = findItem(key);
         if (item != null) {
             return item.get().getValue();
         } else {
             return defaultValue;
+        }
+    }
+
+    @Override
+    public V getOrCreate(K key, @Mandatory Factory<V> factory) {
+        ListItem<MapPair<K,V>> item = findItem(key);
+        if (item != null) {
+            return item.get().getValue();
+        } else {
+            V value = factory.create();
+            set(key, value);
+            return value;
         }
     }
 
@@ -191,5 +198,9 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
                 return iterator.next();
             }
         };
+    }
+
+    public interface Factory<V> {
+        @Optional V create();
     }
 }
