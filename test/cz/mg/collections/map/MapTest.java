@@ -21,6 +21,7 @@ public @Test class MapTest {
         MapTest test = new MapTest();
         test.testEmpty();
         test.testGetAndSet();
+        test.testGetOptional();
         test.testGetOrCreate();
         test.testConstructors();
         test.testClear();
@@ -111,6 +112,20 @@ public @Test class MapTest {
         Assert.assertEquals("v2", map3.get(k1));
         Assert.assertEquals("v2", map3.get(k2));
         Assert.assertEquals(1, map3.count());
+    }
+
+    private void testGetOptional() {
+        Map<Long, Pair<Long, Long>> map = new Map<>(new Capacity(10));
+        Assert.assertEquals(true, map.isEmpty());
+        Assert.assertNull(map.getOptional(1L));
+        Assert.assertNotNull(map.getOptional(1L, new Pair<>()));
+        Assert.assertEquals(true, map.isEmpty());
+        Pair<Long, Long> pair = new Pair<>(7L, 77L);
+        map.set(1L, pair);
+        Assert.assertEquals(1, map.count());
+        Assert.assertSame(pair, map.getOptional(1L));
+        Assert.assertSame(pair, map.getOptional(1L, new Pair<>()));
+        Assert.assertEquals(1, map.count());
     }
 
     private void testGetOrCreate() {
