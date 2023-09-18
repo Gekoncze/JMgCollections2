@@ -6,4 +6,5 @@ public @Data interface WriteableListItem<T> {
     void set(T data);
     T removePrevious();
     T removeNext();
+    T remove();
 }

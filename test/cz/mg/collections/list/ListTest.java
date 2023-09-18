@@ -413,6 +413,13 @@ public @Test class ListTest {
 
         Assert.assertThatCode(() -> list.getFirstItem().removePrevious()).throwsException(NoSuchElementException.class);
         Assert.assertThatCode(() -> list.getLastItem().removeNext()).throwsException(NoSuchElementException.class);
+
+        ListItem<String> item = list.getFirstItem();
+        Assert.assertEquals("1", item.remove());
+        Assert.assertNull(list.getFirstItem());
+        Assert.assertNull(list.getLastItem());
+        Assert.assertEquals(list.isEmpty(), true);
+        Assert.assertThatCode(item::remove).throwsException(NoSuchElementException.class);
     }
 
     private void testRemoveIf() {

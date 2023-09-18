@@ -259,6 +259,10 @@ public @Data class List<T> extends Collection<T> implements ReadableList<T>, Wri
             ListItem<T> nextItem = item.getNextItem();
             ListItem<T> previousItem = item.getPreviousItem();
 
+            if (nextItem == null || previousItem == null) {
+                throw new NoSuchElementException();
+            }
+
             item.setNextItem(null);
             item.setPreviousItem(null);
             previousItem.setNextItem(nextItem);

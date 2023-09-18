@@ -66,4 +66,9 @@ public @Data class ListItem<T> implements ReadableListItem<T>, WriteableListItem
             throw new NoSuchElementException();
         }
     }
+
+    @Override
+    public T remove() {
+        return list.removeItem(this);
+    }
 }
