@@ -14,6 +14,7 @@ public @Test class CollectionTest {
         CollectionTest test = new CollectionTest();
         test.testIsEmpty();
         test.testContains();
+        test.testContainsMatch();
         test.testDebug();
 
         System.out.println("OK");
@@ -67,6 +68,12 @@ public @Test class CollectionTest {
         for (String object : notContained) {
             Assert.assertEquals(false, collection.contains(object));
         }
+    }
+
+    private void testContainsMatch() {
+        Collection<String> collection = create("one", "two", "three");
+        Assert.assertEquals(true, collection.containsMatch(object -> object.startsWith("t")));
+        Assert.assertEquals(false, collection.containsMatch(object -> object.startsWith("a")));
     }
 
     private @Mandatory Collection<String> create(String... objects) {

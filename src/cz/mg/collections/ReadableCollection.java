@@ -5,6 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.components.CompareFunction;
 import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.Predicate;
 
 public @Data interface ReadableCollection<T> extends Iterable<T> {
     int count();
@@ -31,6 +32,16 @@ public @Data interface ReadableCollection<T> extends Iterable<T> {
                 return true;
             }
         }
+        return false;
+    }
+
+    default boolean containsMatch(@Mandatory Predicate<T> condition) {
+        for (T current : this) {
+            if (condition.match(current)) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
