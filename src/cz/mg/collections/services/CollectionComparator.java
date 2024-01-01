@@ -38,7 +38,6 @@ public @Service class CollectionComparator {
         @Optional ReadableCollection<T> b,
         @Mandatory CompareFunction<T> compareFunction
     ) {
-
         if (a == b) {
             return true;
         }
