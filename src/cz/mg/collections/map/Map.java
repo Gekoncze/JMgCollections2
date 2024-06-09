@@ -14,36 +14,42 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
-    private final @Mandatory Array<ListItem<MapPair<K,V>>> array;
-    private final @Mandatory List<MapPair<K,V>> list;
+    private static final int LIMIT = 2;
+    public static final int MIN_LOAD = 25;
+    public static final int MAX_LOAD = 75;
+
+    private @Mandatory Array<ListItem<MapPair<K,V>>> array;
+    private @Mandatory List<MapPair<K,V>> list;
     private final @Mandatory CompareFunction<K> compareFunction;
     private final @Mandatory HashFunction<K> hashFunction;
 
+    public Map() {
+        this(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+    }
+
     public Map(
-        @Mandatory Capacity capacity,
         @Mandatory CompareFunction<K> compareFunction,
         @Mandatory HashFunction<K> hashFunction
     ) {
-        this.array = new Array<>(capacity.getValue());
+        this.array = new Array<>(LIMIT);
         this.list = new List<>();
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
     }
 
-    public Map(@Mandatory Capacity capacity) {
-        this(capacity, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
-    }
-
-    @SafeVarargs
-    public Map(@Mandatory Capacity capacity, ReadablePair<K,V>... pairs) {
-        this(capacity);
+    public Map(@Mandatory Iterable<? extends ReadablePair<K,V>> pairs) {
+        this();
         for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
     }
 
-    public Map(@Mandatory Capacity capacity, @Mandatory Iterable<? extends ReadablePair<K,V>> pairs) {
-        this(capacity);
+    public Map(
+        @Mandatory Iterable<? extends ReadablePair<K,V>> pairs,
+        @Mandatory CompareFunction<K> compareFunction,
+        @Mandatory HashFunction<K> hashFunction
+    ) {
+        this(compareFunction, hashFunction);
         for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
@@ -52,6 +58,11 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
     @Override
     public int count() {
         return list.count();
+    }
+
+    @Override
+    public int load() {
+        return (list.count() * 100) / array.count();
     }
 
     @Override
@@ -134,10 +145,14 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
             list.addLast(new MapPair<>(key, value, index));
             array.set(index, list.getLastItem());
         }
+
+        if (load() > MAX_LOAD) {
+            expand();
+        }
     }
 
     @Override
-    public V remove(K key) {
+    public V unset(K key) {
         int index = index(key);
         ListItem<MapPair<K,V>> startingItem = array.get(index);
 
@@ -156,7 +171,11 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
                         array.set(index, null);
                     }
                 }
-                return list.removeItem(targetItem).getValue();
+                V value = list.removeItem(targetItem).getValue();
+                if (load() < MIN_LOAD) {
+                    shrink();
+                }
+                return value;
             } else {
                 throw new NoSuchElementException();
             }
@@ -194,6 +213,25 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
                 return iterator.next();
             }
         };
+    }
+
+    private void expand() {
+        List<MapPair<K,V>> pairs = list;
+        array = new Array<>(array.count() * 2);
+        list = new List<>();
+        for (MapPair<K,V> pair : pairs) {
+            set(pair.getKey(), pair.getValue());
+        }
+    }
+
+    private void shrink() {
+        if (array.count() <= LIMIT) return;
+        List<MapPair<K,V>> pairs = list;
+        array = new Array<>(array.count() / 2);
+        list = new List<>();
+        for (MapPair<K,V> pair : pairs) {
+            set(pair.getKey(), pair.getValue());
+        }
     }
 
     public interface Factory<V> {

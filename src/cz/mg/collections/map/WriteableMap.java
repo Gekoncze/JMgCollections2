@@ -6,6 +6,6 @@ import cz.mg.annotations.requirement.Mandatory;
 public @Data interface WriteableMap<K,V> {
     V getOrCreate(K key, @Mandatory Map.Factory<V> factory);
     void set(K key, V value);
-    V remove(K key);
+    V unset(K key);
     void clear();
 }

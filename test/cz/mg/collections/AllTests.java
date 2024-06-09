@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.collections.array.ArrayTest;
 import cz.mg.collections.list.ListTest;
 import cz.mg.collections.map.MapTest;
+import cz.mg.collections.map.MapsTest;
 import cz.mg.collections.pair.PairTest;
 import cz.mg.collections.services.*;
 import cz.mg.collections.services.sort.ArraySortTest;
@@ -17,6 +18,7 @@ public @Test class AllTests {
         ArrayTest.main(args);
         ListTest.main(args);
         MapTest.main(args);
+        MapsTest.main(args);
         SetTest.main(args);
         SetsTest.main(args);
         PairTest.main(args);

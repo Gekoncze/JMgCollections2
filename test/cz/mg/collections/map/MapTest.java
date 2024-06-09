@@ -2,13 +2,12 @@ package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.collections.components.Capacity;
-import cz.mg.collections.pair.ReadablePair;
-import cz.mg.test.Assert;
-import cz.mg.collections.list.List;
-import cz.mg.collections.pair.Pair;
 import cz.mg.collections.components.CompareFunctions;
 import cz.mg.collections.components.HashFunctions;
+import cz.mg.collections.list.List;
+import cz.mg.collections.pair.Pair;
+import cz.mg.collections.pair.ReadablePair;
+import cz.mg.test.Assert;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -26,27 +25,20 @@ public @Test class MapTest {
         test.testConstructors();
         test.testClear();
         test.testIterator();
-        test.testRemove();
+        test.testUnset();
+        test.testResize();
 
         System.out.println("OK");
     }
 
     private void testEmpty() {
-        Assert
-            .assertThatCode(() -> new Map<String, String>(new Capacity(-1)))
-            .throwsException(IllegalArgumentException.class);
-
-        Assert
-            .assertThatCode(() -> new Map<String, String>(new Capacity(0)))
-            .throwsException(IllegalArgumentException.class);
-
-        Map<String, String> map = new Map<>(new Capacity(1));
+        Map<String, String> map = new Map<>();
         Assert.assertEquals(0, map.count());
         Assert.assertEquals(true, map.isEmpty());
     }
 
     private void testGetAndSet() {
-        Map<String, String> map = new Map<>(new Capacity(10));
+        Map<String, String> map = new Map<>();
         Assert.assertThatCode(() -> map.get("key")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(null, map.getOptional("key"));
         Assert.assertEquals("my default value", map.getOptional("key", "my default value"));
@@ -90,7 +82,6 @@ public @Test class MapTest {
         TestClass k2 = new TestClass(1);
 
         Map<TestClass, String> map2 = new Map<>(
-            new Capacity(10),
             CompareFunctions.REFERENCE(),
             HashFunctions.HASH_CODE()
         );
@@ -102,7 +93,6 @@ public @Test class MapTest {
         Assert.assertEquals(2, map2.count());
 
         Map<TestClass, String> map3 = new Map<>(
-            new Capacity(10),
             CompareFunctions.EQUALS(),
             HashFunctions.HASH_CODE()
         );
@@ -115,7 +105,7 @@ public @Test class MapTest {
     }
 
     private void testGetOptional() {
-        Map<Long, Pair<Long, Long>> map = new Map<>(new Capacity(10));
+        Map<Long, Pair<Long, Long>> map = new Map<>();
         Assert.assertEquals(true, map.isEmpty());
         Assert.assertNull(map.getOptional(1L));
         Assert.assertNotNull(map.getOptional(1L, new Pair<>()));
@@ -129,7 +119,7 @@ public @Test class MapTest {
     }
 
     private void testGetOrCreate() {
-        Map<Long, Pair<Long, Long>> map = new Map<>(new Capacity(10));
+        Map<Long, Pair<Long, Long>> map = new Map<>();
         Assert.assertEquals(true, map.isEmpty());
         Pair<Long, Long> pair = map.getOrCreate(1L, Pair::new);
         Assert.assertEquals(false, map.isEmpty());
@@ -142,9 +132,9 @@ public @Test class MapTest {
     }
 
     private void testConstructors() {
-        Map<String, String> map1 = new Map<>(
-            new Capacity(5),
-            new Pair<>("key1", "value1"), new Pair<>("key2", "value2")
+        Map<String, String> map1 = Maps.create(
+            new Pair<>("key1", "value1"),
+            new Pair<>("key2", "value2")
         );
         Assert.assertEquals(2, map1.count());
         Assert.assertEquals(false, map1.isEmpty());
@@ -152,7 +142,7 @@ public @Test class MapTest {
         Assert.assertEquals("value2", map1.get("key2"));
 
         List<Pair<String, String>> pairs = new List<>(new Pair<>("k1", "v1"), new Pair<>("k2", "v2"));
-        Map<String, String> map2 = new Map<>(new Capacity(5), pairs);
+        Map<String, String> map2 = new Map<>(pairs);
         Assert.assertEquals(false, map2.isEmpty());
 
         map2.set("k1", null);
@@ -163,7 +153,7 @@ public @Test class MapTest {
         Assert.assertEquals("k1", pairs.getFirst().getKey());
         Assert.assertEquals("v1", pairs.getFirst().getValue());
 
-        Map<String, String> map3 = new Map<>(new Capacity(5), map1);
+        Map<String, String> map3 = new Map<>(map1);
         Assert.assertEquals(false, map3.isEmpty());
 
         map3.set("key1", "value1x");
@@ -180,8 +170,7 @@ public @Test class MapTest {
     }
 
     private void testClear() {
-        Map<String, String> map = new Map<>(
-            new Capacity(5),
+        Map<String, String> map = Maps.create(
             new Pair<>("key", "value"),
             new Pair<>("k", "v")
         );
@@ -197,8 +186,7 @@ public @Test class MapTest {
     }
 
     private void testIterator() {
-        Map<String, Integer> map = new Map<>(
-            new Capacity(10),
+        Map<String, Integer> map = Maps.create(
             new Pair<>("0", 0), new Pair<>("1", 1), new Pair<>("2", 2)
         );
         Iterator<ReadablePair<String, Integer>> iterator = map.iterator();
@@ -222,61 +210,51 @@ public @Test class MapTest {
         Assert.assertThatCode(iterator::next).throwsException(NoSuchElementException.class);
     }
 
-    private void testRemove() {
-        testRemove(new Map<>(new Capacity(1)));
-        testRemove(new Map<>(new Capacity(2)));
-        testRemove(new Map<>(new Capacity(3)));
-        testRemove(new Map<>(new Capacity(5)));
-        testRemove(new Map<>(new Capacity(7)));
-        testRemove(new Map<>(new Capacity(10)));
-        testRemove(new Map<>(new Capacity(50)));
-        testRemove(new Map<>(new Capacity(100)));
-    }
-
-    private void testRemove(@Mandatory Map<String, Integer> map) {
+    private void testUnset() {
+        Map<String, Integer> map = new Map<>();
         for (int i = 0; i < 50; i++) {
             map.set("" + i, i);
         }
         Assert.assertEquals(50, map.count());
 
-        Assert.assertThatCode(() -> map.remove(null)).throwsException(NoSuchElementException.class);
-        Assert.assertThatCode(() -> map.remove("foo")).throwsException(NoSuchElementException.class);
+        Assert.assertThatCode(() -> map.unset(null)).throwsException(NoSuchElementException.class);
+        Assert.assertThatCode(() -> map.unset("foo")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(50, map.count());
 
         map.set(null, -1);
         Assert.assertEquals(51, map.count());
 
-        Assert.assertEquals(-1, map.remove(null));
+        Assert.assertEquals(-1, map.unset(null));
         Assert.assertEquals(50, map.count());
 
         List<String> removedKeys = new List<>();
-        testRemove(map, "0", removedKeys);
-        testRemove(map, "1", removedKeys);
-        testRemove(map, "49", removedKeys);
-        testRemove(map, "20", removedKeys);
-        testRemove(map, "19", removedKeys);
-        testRemove(map, "18", removedKeys);
-        testRemove(map, "2", removedKeys);
-        testRemove(map, "27", removedKeys);
-        testRemove(map, "48", removedKeys);
+        testUnset(map, "0", removedKeys);
+        testUnset(map, "1", removedKeys);
+        testUnset(map, "49", removedKeys);
+        testUnset(map, "20", removedKeys);
+        testUnset(map, "19", removedKeys);
+        testUnset(map, "18", removedKeys);
+        testUnset(map, "2", removedKeys);
+        testUnset(map, "27", removedKeys);
+        testUnset(map, "48", removedKeys);
 
         for (int i = 0; i < 50; i++) {
-            testRemove(map, "" + i, removedKeys);
+            testUnset(map, "" + i, removedKeys);
         }
     }
 
-    private void testRemove(
+    private void testUnset(
         @Mandatory Map<String, Integer> map,
         @Mandatory String key,
         @Mandatory List<String> removedKeys
     ) {
         if (removedKeys.contains(key)) {
-            Assert.assertThatCode(() -> map.remove(key)).throwsException(NoSuchElementException.class);
+            Assert.assertThatCode(() -> map.unset(key)).throwsException(NoSuchElementException.class);
             return;
         }
 
         int countBefore = map.count();
-        Assert.assertEquals(Integer.parseInt(key), map.remove(key));
+        Assert.assertEquals(Integer.parseInt(key), map.unset(key));
         Assert.assertEquals(countBefore - 1, map.count());
         removedKeys.addLast(key);
 
@@ -288,6 +266,59 @@ public @Test class MapTest {
                 Assert.assertEquals(i, map.get("" + i));
             }
         }
+    }
+
+    private void testResize() {
+        Map<Integer, String> map = new Map<>();
+        Assert.assertEquals(0, map.load());
+
+        map.set(0, "0");
+        verifyLoad(map);
+
+        int lastLoad = map.load();
+
+        for (int i = 1; i < 50; i++) {
+            map.set(i, "" + i);
+            verifyExpand(map, lastLoad, i, "" + i);
+            lastLoad = map.load();
+        }
+
+        for (int i = 0; i < 49; i++) {
+            map.unset(i);
+            verifyShrink(map, lastLoad, i, "" + i);
+            lastLoad = map.load();
+        }
+
+        map.unset(49);
+        Assert.assertEquals(0, map.load());
+    }
+
+    private void verifyExpand(@Mandatory Map<Integer, String> map, int lastLoad, int i, String s) {
+        verifyLoad(map);
+
+        int newLoad = map.load();
+        if (newLoad < lastLoad) {
+            map.unset(i);
+            Assert.assertNotEquals(lastLoad, map.load());
+            map.set(i, s);
+            Assert.assertEquals(newLoad, map.load());
+        }
+    }
+
+    private void verifyShrink(@Mandatory Map<Integer, String> map, int lastLoad, int i, String s) {
+        verifyLoad(map);
+
+        int newLoad = map.load();
+        if (newLoad > lastLoad) {
+            map.set(i, s);
+            Assert.assertNotEquals(lastLoad, map.load());
+            map.unset(i);
+            Assert.assertEquals(newLoad, map.load());
+        }
+    }
+
+    private void verifyLoad(@Mandatory Map<Integer, String> map) {
+        Assert.assertEquals(true, map.load() >= Map.MIN_LOAD && map.load() <= Map.MAX_LOAD);
     }
 
     private static class TestClass {
