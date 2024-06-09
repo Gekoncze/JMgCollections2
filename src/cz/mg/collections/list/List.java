@@ -302,7 +302,7 @@ public @Data class List<T> extends Collection<T> implements ReadableList<T>, Wri
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public @Mandatory Iterator<T> iterator() {
         return new Iterator<>() {
             private @Optional ListItem<T> current = firstItem;
 
