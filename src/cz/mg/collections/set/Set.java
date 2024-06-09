@@ -13,36 +13,39 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, WriteableSet<T> {
-    private final @Mandatory Array<ListItem<SetItem<T>>> array;
-    private final @Mandatory List<SetItem<T>> list;
+    private static final int LIMIT = 2;
+    public static final int MIN_LOAD = 25;
+    public static final int MAX_LOAD = 75;
+
+    private @Mandatory Array<ListItem<SetItem<T>>> array;
+    private @Mandatory List<SetItem<T>> list;
     private final @Mandatory CompareFunction<T> compareFunction;
     private final @Mandatory HashFunction<T> hashFunction;
 
     public Set(
-        @Mandatory Capacity capacity,
         @Mandatory CompareFunction<T> compareFunction,
         @Mandatory HashFunction<T> hashFunction
     ) {
-        this.array = new Array<>(capacity.getValue());
+        this.array = new Array<>(LIMIT);
         this.list = new List<>();
         this.compareFunction = compareFunction;
         this.hashFunction = hashFunction;
     }
 
-    public Set(@Mandatory Capacity capacity) {
-        this(capacity, CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+    public Set() {
+        this(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
     }
 
     @SafeVarargs
-    public Set(@Mandatory Capacity capacity, T... values) {
-        this(capacity);
+    public Set(T... values) {
+        this();
         for (T value : values) {
             set(value);
         }
     }
 
-    public Set(@Mandatory Capacity capacity, @Mandatory Iterable<? extends T> values) {
-        this(capacity);
+    public Set(@Mandatory Iterable<? extends T> values) {
+        this();
         for (T value : values) {
             set(value);
         }
@@ -51,6 +54,11 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
     @Override
     public int count() {
         return list.count();
+    }
+
+    @Override
+    public int load() {
+        return (list.count() * 100) / array.count();
     }
 
     @Override
@@ -99,10 +107,14 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
             list.addLast(new SetItem<>(value, index));
             array.set(index, list.getLastItem());
         }
+
+        if (load() > MAX_LOAD) {
+            expand();
+        }
     }
 
     @Override
-    public void remove(T value) {
+    public void unset(T value) {
         int index = index(value);
         ListItem<SetItem<T>> startingItem = array.get(index);
 
@@ -127,6 +139,10 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
             }
         } else {
             throw new NoSuchElementException();
+        }
+
+        if (load() < MIN_LOAD) {
+            shrink();
         }
     }
 
@@ -159,5 +175,24 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
                 return iterator.next().get();
             }
         };
+    }
+
+    private void expand() {
+        List<SetItem<T>> items = list;
+        array = new Array<>(array.count() * 2);
+        list = new List<>();
+        for (SetItem<T> item : items) {
+            set(item.get());
+        }
+    }
+
+    private void shrink() {
+        if (array.count() <= LIMIT) return;
+        List<SetItem<T>> items = list;
+        array = new Array<>(array.count() / 2);
+        list = new List<>();
+        for (SetItem<T> item : items) {
+            set(item.get());
+        }
     }
 }
