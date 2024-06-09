@@ -86,7 +86,7 @@ public @Test class SetTest {
     }
 
     private void testConstructors() {
-        Set<String> set1 = new Set<>("value1", "value2", null);
+        Set<String> set1 = Sets.create("value1", "value2", null);
         Assert.assertEquals(3, set1.count());
         Assert.assertEquals(false, set1.isEmpty());
         Assert.assertEquals(true, set1.contains("value1"));
@@ -110,7 +110,7 @@ public @Test class SetTest {
     }
 
     private void testClear() {
-        Set<String> set = new Set<>("value", "v");
+        Set<String> set = Sets.create("value", "v");
         Assert.assertEquals(false, set.isEmpty());
         Assert.assertEquals(2, set.count());
 
@@ -123,7 +123,7 @@ public @Test class SetTest {
     }
 
     private void testIterator() {
-        Set<Integer> set = new Set<>(0, 1, 2);
+        Set<Integer> set = Sets.create(0, 1, 2);
         Iterator<Integer> iterator = set.iterator();
 
         Assert.assertEquals(true, iterator.hasNext());

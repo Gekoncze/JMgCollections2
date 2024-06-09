@@ -22,6 +22,10 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
     private final @Mandatory CompareFunction<T> compareFunction;
     private final @Mandatory HashFunction<T> hashFunction;
 
+    public Set() {
+        this(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+    }
+
     public Set(
         @Mandatory CompareFunction<T> compareFunction,
         @Mandatory HashFunction<T> hashFunction
@@ -32,20 +36,19 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
         this.hashFunction = hashFunction;
     }
 
-    public Set() {
-        this(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
-    }
-
-    @SafeVarargs
-    public Set(T... values) {
+    public Set(@Mandatory Iterable<? extends T> values) {
         this();
         for (T value : values) {
             set(value);
         }
     }
 
-    public Set(@Mandatory Iterable<? extends T> values) {
-        this();
+    public Set(
+        @Mandatory Iterable<? extends T> values,
+        @Mandatory CompareFunction<T> compareFunction,
+        @Mandatory HashFunction<T> hashFunction
+    ) {
+        this(compareFunction, hashFunction);
         for (T value : values) {
             set(value);
         }
