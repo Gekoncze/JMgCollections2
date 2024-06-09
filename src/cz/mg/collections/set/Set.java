@@ -23,10 +23,6 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
         @Mandatory CompareFunction<T> compareFunction,
         @Mandatory HashFunction<T> hashFunction
     ) {
-        if (capacity.getValue() < 1) {
-            throw new IllegalArgumentException("Cache must be > 0.");
-        }
-
         this.array = new Array<>(capacity.getValue());
         this.list = new List<>();
         this.compareFunction = compareFunction;

@@ -24,10 +24,6 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
         @Mandatory CompareFunction<K> compareFunction,
         @Mandatory HashFunction<K> hashFunction
     ) {
-        if (capacity.getValue() < 1) {
-            throw new IllegalArgumentException("Capacity must be > 0.");
-        }
-
         this.array = new Array<>(capacity.getValue());
         this.list = new List<>();
         this.compareFunction = compareFunction;
