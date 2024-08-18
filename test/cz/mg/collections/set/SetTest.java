@@ -23,6 +23,8 @@ public @Test class SetTest {
         test.testIterator();
         test.testUnset();
         test.testResize();
+        test.testSetCollection();
+        test.testUnsetCollection();
 
         System.out.println("OK");
     }
@@ -217,6 +219,46 @@ public @Test class SetTest {
 
         set.unset(49);
         Assert.assertEquals(0, set.load());
+    }
+
+    private void testSetCollection() {
+        Set<Integer> set = new Set<>(1, 2);
+
+        Assert.assertEquals(2, set.count());
+        Assert.assertEquals(true, set.contains(1));
+        Assert.assertEquals(true, set.contains(2));
+        Assert.assertEquals(false, set.contains(3));
+        Assert.assertEquals(false, set.contains(4));
+        Assert.assertEquals(false, set.contains(5));
+
+        set.setCollection(new Set<>(3, 4, 5));
+
+        Assert.assertEquals(5, set.count());
+        Assert.assertEquals(true, set.contains(1));
+        Assert.assertEquals(true, set.contains(2));
+        Assert.assertEquals(true, set.contains(3));
+        Assert.assertEquals(true, set.contains(4));
+        Assert.assertEquals(true, set.contains(5));
+    }
+
+    private void testUnsetCollection() {
+        Set<Integer> set = new Set<>(1, 2, 3, 4, 5);
+
+        Assert.assertEquals(5, set.count());
+        Assert.assertEquals(true, set.contains(1));
+        Assert.assertEquals(true, set.contains(2));
+        Assert.assertEquals(true, set.contains(3));
+        Assert.assertEquals(true, set.contains(4));
+        Assert.assertEquals(true, set.contains(5));
+
+        set.unsetCollection(new Set<>(3, 4, 5));
+
+        Assert.assertEquals(2, set.count());
+        Assert.assertEquals(true, set.contains(1));
+        Assert.assertEquals(true, set.contains(2));
+        Assert.assertEquals(false, set.contains(3));
+        Assert.assertEquals(false, set.contains(4));
+        Assert.assertEquals(false, set.contains(5));
     }
 
     private void verifyExpand(@Mandatory Set<Integer> set, int lastLoad, int i) {

@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
+import cz.mg.collections.ReadableCollection;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.components.*;
 import cz.mg.collections.list.List;
@@ -49,6 +50,14 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
         @Mandatory HashFunction<T> hashFunction
     ) {
         this(compareFunction, hashFunction);
+        for (T value : values) {
+            set(value);
+        }
+    }
+
+    @SafeVarargs
+    public Set(@Mandatory T... values) {
+        this();
         for (T value : values) {
             set(value);
         }
@@ -146,6 +155,20 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
 
         if (load() < MIN_LOAD) {
             shrink();
+        }
+    }
+
+    @Override
+    public void setCollection(ReadableCollection<T> collection) {
+        for (T value : collection) {
+            set(value);
+        }
+    }
+
+    @Override
+    public void unsetCollection(ReadableCollection<T> collection) {
+        for (T value : collection) {
+            unset(value);
         }
     }
 
