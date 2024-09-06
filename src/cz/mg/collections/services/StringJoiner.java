@@ -24,11 +24,11 @@ public @Service class StringJoiner {
     private StringJoiner() {
     }
 
-    public @Mandatory String join(@Mandatory Collection<String> collection) {
+    public <T> @Mandatory String join(@Mandatory Collection<T> collection) {
         return join(collection, "");
     }
 
-    public @Mandatory String join(@Mandatory Collection<String> collection, @Mandatory String delimiter) {
+    public <T> @Mandatory String join(@Mandatory Collection<T> collection, @Mandatory String delimiter) {
         return join(collection, delimiter, Objects::toString);
     }
 
