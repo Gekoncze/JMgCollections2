@@ -5,6 +5,8 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.Collection;
 import cz.mg.collections.components.ToStringFunction;
 
+import java.util.Objects;
+
 public @Service class StringJoiner {
     private static volatile @Service StringJoiner instance;
 
@@ -22,19 +24,12 @@ public @Service class StringJoiner {
     private StringJoiner() {
     }
 
+    public @Mandatory String join(@Mandatory Collection<String> collection) {
+        return join(collection, "");
+    }
+
     public @Mandatory String join(@Mandatory Collection<String> collection, @Mandatory String delimiter) {
-        StringBuilder builder = new StringBuilder();
-
-        int i = 0;
-        for (String part : collection) {
-            builder.append(part);
-            if (i < collection.count() - 1) {
-                builder.append(delimiter);
-            }
-            i++;
-        }
-
-        return builder.toString();
+        return join(collection, delimiter, Objects::toString);
     }
 
     public <T> @Mandatory String join(
