@@ -2,6 +2,7 @@ package cz.mg.collections;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.collections.array.ArrayTest;
+import cz.mg.collections.components.StringJoinerTest;
 import cz.mg.collections.list.ListTest;
 import cz.mg.collections.map.MapTest;
 import cz.mg.collections.map.MapsTest;
@@ -23,9 +24,10 @@ public @Test class AllTests {
         SetsTest.main(args);
         PairTest.main(args);
 
+        StringJoinerTest.main(args);
+
         ArraySortTest.main(args);
         ListSortTest.main(args);
         CollectionComparatorTest.main(args);
-        StringJoinerTest.main(args);
     }
 }

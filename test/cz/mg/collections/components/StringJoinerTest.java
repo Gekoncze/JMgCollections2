@@ -1,6 +1,5 @@
-package cz.mg.collections.services;
+package cz.mg.collections.components;
 
-import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.Collection;
@@ -18,11 +17,10 @@ public @Test class StringJoinerTest {
         test.testJoinStrings();
         test.testJoinObjects();
         test.testJoinMethods();
+        test.testJoinGenerics();
 
         System.out.println("OK");
     }
-
-    private final @Service StringJoiner joiner = StringJoiner.getInstance();
 
     private void testJoinStrings() {
         testJoinStrings(new List<>(), ".", "");
@@ -34,11 +32,14 @@ public @Test class StringJoinerTest {
     }
 
     private void testJoinStrings(
-        @Mandatory Collection<String> parts,
+        @Mandatory Collection<String> items,
         @Mandatory String delimiter,
         @Mandatory String expectedResult
     ) {
-        String actualResult = joiner.join(parts, delimiter);
+        String actualResult = new StringJoiner<>(items)
+            .withDelimiter(delimiter)
+            .join();
+
         Assert.assertEquals(expectedResult, actualResult);
     }
 
@@ -56,13 +57,20 @@ public @Test class StringJoinerTest {
         @Mandatory String delimiter,
         @Mandatory String expectedResult
     ) {
-        String actualResult = joiner.join(items, delimiter, Objects::toString);
+        String actualResult = new StringJoiner<>(items)
+            .withDelimiter(delimiter)
+            .join();
+
         Assert.assertEquals(expectedResult, actualResult);
     }
 
     private void testJoinMethods() {
-        Assert.assertEquals("foobar", joiner.join(new List<>("foo", "bar")));
-        Assert.assertEquals("foobar", joiner.join(new List<>("foo", "bar"), ""));
-        Assert.assertEquals("foobar", joiner.join(new List<>("foo", "bar"), "", Objects::toString));
+        Assert.assertEquals("foobar", new StringJoiner<>(new List<>("foo", "bar")).join());
+        Assert.assertEquals("foobar", new StringJoiner<>(new List<>("foo", "bar")).withDelimiter("").join());
+        Assert.assertEquals("foobar", new StringJoiner<>(new List<>("foo", "bar")).withDelimiter("").withConverter(Objects::toString).join());
+    }
+
+    private void testJoinGenerics() {
+        Assert.assertEquals("3", new StringJoiner<>(new List<>("abc")).withConverter(s -> "" + s.length()).join());
     }
 }
