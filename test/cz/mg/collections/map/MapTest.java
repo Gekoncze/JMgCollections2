@@ -167,6 +167,19 @@ public @Test class MapTest {
         Assert.assertEquals("value1", map1.get("key1"));
         Assert.assertEquals("value2", map1.get("key2"));
         Assert.assertThatCode(() -> map1.get("key3")).throwsException(NoSuchElementException.class);
+
+        Map<String, String> map4 = new Map<>(
+            new Pair<>("a", "1"),
+            new Pair<>("b", "2"),
+            new Pair<>("c", "3"),
+            new Pair<>("d", "4")
+        );
+
+        Assert.assertEquals(4, map4.count());
+        Assert.assertEquals("1", map4.get("a"));
+        Assert.assertEquals("2", map4.get("b"));
+        Assert.assertEquals("3", map4.get("c"));
+        Assert.assertEquals("4", map4.get("d"));
     }
 
     private void testClear() {

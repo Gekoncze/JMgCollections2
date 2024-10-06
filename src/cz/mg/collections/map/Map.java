@@ -44,6 +44,14 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
         }
     }
 
+    @SafeVarargs
+    public Map(@Mandatory ReadablePair<K,V>... pairs) {
+        this();
+        for (ReadablePair<K,V> pair : pairs) {
+            set(pair.getKey(), pair.getValue());
+        }
+    }
+
     public Map(
         @Mandatory Iterable<? extends ReadablePair<K,V>> pairs,
         @Mandatory CompareFunction<K> compareFunction,
