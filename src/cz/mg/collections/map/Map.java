@@ -84,12 +84,12 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
     }
 
     @Override
-    public V getOptional(K key) {
-        return getOptional(key, null);
+    public @Optional V getOptional(K key) {
+        return getOrDefault(key, null);
     }
 
     @Override
-    public V getOptional(K key, V defaultValue) {
+    public V getOrDefault(K key, V defaultValue) {
         ListItem<MapPair<K,V>> item = findItem(key);
         if (item != null) {
             return item.get().getValue();

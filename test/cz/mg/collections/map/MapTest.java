@@ -20,7 +20,7 @@ public @Test class MapTest {
         MapTest test = new MapTest();
         test.testEmpty();
         test.testGetAndSet();
-        test.testGetOptional();
+        test.testGetOptionalDefault();
         test.testGetOrCreate();
         test.testConstructors();
         test.testClear();
@@ -41,7 +41,7 @@ public @Test class MapTest {
         Map<String, String> map = new Map<>();
         Assert.assertThatCode(() -> map.get("key")).throwsException(NoSuchElementException.class);
         Assert.assertEquals(null, map.getOptional("key"));
-        Assert.assertEquals("my default value", map.getOptional("key", "my default value"));
+        Assert.assertEquals("my default value", map.getOrDefault("key", "my default value"));
         map.set("key", "value");
         map.set("key2", "value2");
         Assert.assertThatCode(() -> map.get("value")).throwsException(NoSuchElementException.class);
@@ -104,17 +104,17 @@ public @Test class MapTest {
         Assert.assertEquals(1, map3.count());
     }
 
-    private void testGetOptional() {
+    private void testGetOptionalDefault() {
         Map<Long, Pair<Long, Long>> map = new Map<>();
         Assert.assertEquals(true, map.isEmpty());
         Assert.assertNull(map.getOptional(1L));
-        Assert.assertNotNull(map.getOptional(1L, new Pair<>()));
+        Assert.assertNotNull(map.getOrDefault(1L, new Pair<>()));
         Assert.assertEquals(true, map.isEmpty());
         Pair<Long, Long> pair = new Pair<>(7L, 77L);
         map.set(1L, pair);
         Assert.assertEquals(1, map.count());
         Assert.assertSame(pair, map.getOptional(1L));
-        Assert.assertSame(pair, map.getOptional(1L, new Pair<>()));
+        Assert.assertSame(pair, map.getOrDefault(1L, new Pair<>()));
         Assert.assertEquals(1, map.count());
     }
 
