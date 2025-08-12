@@ -18,6 +18,7 @@ public @Test class StringJoinerTest {
         test.testJoinObjects();
         test.testJoinMethods();
         test.testJoinGenerics();
+        test.testJoinFilter();
 
         System.out.println("OK");
     }
@@ -72,5 +73,34 @@ public @Test class StringJoinerTest {
 
     private void testJoinGenerics() {
         Assert.assertEquals("3", new StringJoiner<>(new List<>("abc")).withConverter(s -> "" + s.length()).join());
+    }
+
+    private void testJoinFilter() {
+        testJoinFilter("  ", o -> true, "", "", "");
+        testJoinFilter("     ", o -> true, " ", " ", " ");
+        testJoinFilter("a b c", o -> true, "a", "b", "c");
+        testJoinFilter("", o -> false, "a", "b", "c");
+        testJoinFilter("a c", o -> !o.equals("b"), "a", "b", "c");
+        testJoinFilter("a b", o -> !o.equals("c"), "a", "b", "c");
+        testJoinFilter("b c", o -> !o.equals("a"), "a", "b", "c");
+        testJoinFilter("a null c", o -> true, "a", null, "c");
+        testJoinFilter("a c", Objects::nonNull, "a", null, "c");
+        testJoinFilter("a c", o -> !o.isEmpty(), "a", "", "c");
+        testJoinFilter("a c", o -> !o.isBlank(), "a", "     ", "c");
+        testJoinFilter("", o -> !o.isBlank());
+        testJoinFilter("", o -> !o.isBlank(), "");
+        testJoinFilter("a", o -> !o.isBlank(), "a");
+        testJoinFilter("a", o -> !o.isBlank(), "a", "");
+        testJoinFilter("a", o -> !o.isBlank(), "", "a");
+    }
+
+    private void testJoinFilter(String expectation, Predicate<String> filter, String... input) {
+        Assert.assertEquals(
+            expectation,
+            new StringJoiner<>(input)
+                .withDelimiter(" ")
+                .withFilter(filter)
+                .join()
+        );
     }
 }
