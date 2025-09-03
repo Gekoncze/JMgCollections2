@@ -1,4 +1,4 @@
-package cz.mg.collections.components;
+package cz.mg.collections.services.sort;
 
 public enum Direction {
     ASCENDING,

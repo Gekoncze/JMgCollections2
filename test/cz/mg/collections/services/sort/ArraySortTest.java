@@ -2,7 +2,6 @@ package cz.mg.collections.services.sort;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.collections.array.Array;
-import cz.mg.collections.components.Direction;
 import cz.mg.test.Assert;
 
 public @Test class ArraySortTest {
