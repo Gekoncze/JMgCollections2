@@ -21,7 +21,7 @@ public @Test class ArrayTest {
     }
 
     private void testEmptyArray() {
-        Assert.assertThatCode(() -> new Array<>(-1)).throwsException(IllegalArgumentException.class);
+        Assert.assertException(() -> new Array<>(-1), IllegalArgumentException.class);
         Array<String> array = new Array<>(0);
         Assert.assertEquals(0, array.count());
         Assert.assertEquals(true, array.isEmpty());
@@ -39,11 +39,11 @@ public @Test class ArrayTest {
         array.set(0, "first");
         array.set(2, "last");
 
-        Assert.assertThatCode(() -> array.get(-1)).throwsException(ArrayIndexOutOfBoundsException.class);
+        Assert.assertException(() -> array.get(-1), ArrayIndexOutOfBoundsException.class);
         Assert.assertEquals("first", array.get(0));
         Assert.assertEquals(null, array.get(1));
         Assert.assertEquals("last", array.get(2));
-        Assert.assertThatCode(() -> array.get(3)).throwsException(ArrayIndexOutOfBoundsException.class);
+        Assert.assertException(() -> array.get(3), ArrayIndexOutOfBoundsException.class);
 
         array.set(0, null);
         Assert.assertEquals(null, array.get(0));

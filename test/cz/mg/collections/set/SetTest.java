@@ -6,6 +6,7 @@ import cz.mg.collections.list.List;
 import cz.mg.functions.EqualsFunctions;
 import cz.mg.functions.HashFunctions;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -138,7 +139,10 @@ public @Test class SetTest {
         Assert.assertEquals(2, iterator.next());
 
         Assert.assertEquals(false, iterator.hasNext());
-        Assert.assertThatCode(iterator::next).throwsException(NoSuchElementException.class);
+
+        Assertions.assertThatCode(iterator::next)
+            .withMessage("No more elements should be returned.")
+            .throwsException(NoSuchElementException.class);
     }
 
     private void testUnset() {
@@ -148,14 +152,14 @@ public @Test class SetTest {
         }
         Assert.assertEquals(50, set.count());
 
-        Assert.assertThatCode(() -> set.unset(null)).throwsException(NoSuchElementException.class);
-        Assert.assertThatCode(() -> set.unset(51)).throwsException(NoSuchElementException.class);
+        Assert.assertException(() -> set.unset(null), NoSuchElementException.class);
+        Assert.assertException(() -> set.unset(51), NoSuchElementException.class);
         Assert.assertEquals(50, set.count());
 
         set.set(null);
         Assert.assertEquals(51, set.count());
 
-        Assert.assertThatCode(() -> set.unset(null)).doesNotThrowAnyException();
+        Assert.assertNoException(() -> set.unset(null));
         Assert.assertEquals(50, set.count());
 
         List<Integer> removedValues = new List<>();
@@ -180,12 +184,12 @@ public @Test class SetTest {
         @Mandatory List<Integer> removedValues
     ) {
         if (removedValues.contains(value)) {
-            Assert.assertThatCode(() -> set.unset(value)).throwsException(NoSuchElementException.class);
+            Assert.assertException(() -> set.unset(value), NoSuchElementException.class);
             return;
         }
 
         int countBefore = set.count();
-        Assert.assertThatCode(() -> set.unset(value)).doesNotThrowAnyException();
+        Assert.assertNoException(() -> set.unset(value));
         Assert.assertEquals(countBefore - 1, set.count());
         removedValues.addLast(value);
 
