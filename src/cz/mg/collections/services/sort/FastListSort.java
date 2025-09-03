@@ -6,7 +6,7 @@ import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
 import cz.mg.collections.components.Direction;
-import cz.mg.collections.components.OrderFunction;
+import cz.mg.functions.OrderFunction;
 
 public @Service class FastListSort implements ListSort {
     private static volatile @Service FastListSort instance;

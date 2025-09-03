@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.components.Direction;
-import cz.mg.collections.components.OrderFunction;
+import cz.mg.functions.OrderFunction;
 
 public @Service class SimpleArraySort implements ArraySort {
     private static volatile @Service SimpleArraySort instance;

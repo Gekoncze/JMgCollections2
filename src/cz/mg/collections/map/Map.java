@@ -5,10 +5,13 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.Collection;
 import cz.mg.collections.array.Array;
-import cz.mg.collections.components.*;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ListItem;
 import cz.mg.collections.pair.ReadablePair;
+import cz.mg.functions.EqualsFunction;
+import cz.mg.functions.EqualsFunctions;
+import cz.mg.functions.HashFunction;
+import cz.mg.functions.HashFunctions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

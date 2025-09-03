@@ -4,6 +4,8 @@ import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.Collection;
 import cz.mg.collections.array.Array;
+import cz.mg.functions.MapFunction;
+import cz.mg.functions.Predicate;
 
 import java.util.Objects;
 

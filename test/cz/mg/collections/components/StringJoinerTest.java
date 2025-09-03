@@ -5,6 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.Collection;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
+import cz.mg.functions.Predicate;
 import cz.mg.test.Assert;
 
 import java.util.Objects;

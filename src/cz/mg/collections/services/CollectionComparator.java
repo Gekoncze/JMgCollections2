@@ -4,8 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.ReadableCollection;
-import cz.mg.collections.components.EqualsFunction;
-import cz.mg.collections.components.EqualsFunctions;
+import cz.mg.functions.EqualsFunction;
+import cz.mg.functions.EqualsFunctions;
 
 import java.util.Iterator;
 

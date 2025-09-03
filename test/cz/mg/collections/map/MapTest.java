@@ -2,11 +2,11 @@ package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.collections.components.EqualsFunctions;
-import cz.mg.collections.components.HashFunctions;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
 import cz.mg.collections.pair.ReadablePair;
+import cz.mg.functions.EqualsFunctions;
+import cz.mg.functions.HashFunctions;
 import cz.mg.test.Assert;
 
 import java.util.Iterator;

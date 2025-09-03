@@ -3,9 +3,9 @@ package cz.mg.collections;
 import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
-import cz.mg.collections.components.EqualsFunction;
-import cz.mg.collections.components.EqualsFunctions;
-import cz.mg.collections.components.Predicate;
+import cz.mg.functions.EqualsFunction;
+import cz.mg.functions.EqualsFunctions;
+import cz.mg.functions.Predicate;
 
 public @Data interface ReadableCollection<T> extends Iterable<T> {
     int count();

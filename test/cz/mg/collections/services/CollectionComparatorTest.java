@@ -3,7 +3,7 @@ package cz.mg.collections.services;
 import cz.mg.annotations.classes.Test;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
-import cz.mg.collections.components.EqualsFunctions;
+import cz.mg.functions.EqualsFunctions;
 import cz.mg.test.Assert;
 
 public @Test class CollectionComparatorTest {
