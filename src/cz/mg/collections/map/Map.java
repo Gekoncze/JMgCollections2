@@ -20,20 +20,20 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
 
     private @Mandatory Array<ListItem<MapPair<K,V>>> array;
     private @Mandatory List<MapPair<K,V>> list;
-    private final @Mandatory CompareFunction<K> compareFunction;
+    private final @Mandatory EqualsFunction<K> equalsFunction;
     private final @Mandatory HashFunction<K> hashFunction;
 
     public Map() {
-        this(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+        this(EqualsFunctions.EQUALS(), HashFunctions.HASH_CODE());
     }
 
     public Map(
-        @Mandatory CompareFunction<K> compareFunction,
+        @Mandatory EqualsFunction<K> equalsFunction,
         @Mandatory HashFunction<K> hashFunction
     ) {
         this.array = new Array<>(LIMIT);
         this.list = new List<>();
-        this.compareFunction = compareFunction;
+        this.equalsFunction = equalsFunction;
         this.hashFunction = hashFunction;
     }
 
@@ -54,10 +54,10 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
 
     public Map(
         @Mandatory Iterable<? extends ReadablePair<K,V>> pairs,
-        @Mandatory CompareFunction<K> compareFunction,
+        @Mandatory EqualsFunction<K> equalsFunction,
         @Mandatory HashFunction<K> hashFunction
     ) {
-        this(compareFunction, hashFunction);
+        this(equalsFunction, hashFunction);
         for (ReadablePair<K,V> pair : pairs) {
             set(pair.getKey(), pair.getValue());
         }
@@ -197,7 +197,7 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
     }
 
     private boolean equals(K a, K b) {
-        return compareFunction.equalsOptional(a, b);
+        return equalsFunction.equalsOptional(a, b);
     }
 
     @Override

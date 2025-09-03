@@ -2,7 +2,7 @@ package cz.mg.collections.map;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.EqualsFunctions;
 import cz.mg.collections.components.HashFunctions;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
@@ -82,7 +82,7 @@ public @Test class MapTest {
         TestClass k2 = new TestClass(1);
 
         Map<TestClass, String> map2 = new Map<>(
-            CompareFunctions.REFERENCE(),
+            EqualsFunctions.REFERENCE(),
             HashFunctions.HASH_CODE()
         );
         map2.set(k1, "v1");
@@ -93,7 +93,7 @@ public @Test class MapTest {
         Assert.assertEquals(2, map2.count());
 
         Map<TestClass, String> map3 = new Map<>(
-            CompareFunctions.EQUALS(),
+            EqualsFunctions.EQUALS(),
             HashFunctions.HASH_CODE()
         );
         map3.set(k1, "v1");

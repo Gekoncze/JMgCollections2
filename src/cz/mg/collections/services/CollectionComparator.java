@@ -4,8 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.collections.ReadableCollection;
-import cz.mg.collections.components.CompareFunction;
-import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.EqualsFunction;
+import cz.mg.collections.components.EqualsFunctions;
 
 import java.util.Iterator;
 
@@ -30,13 +30,13 @@ public @Service class CollectionComparator {
         @Optional ReadableCollection<T> a,
         @Optional ReadableCollection<T> b
     ) {
-        return equals(a, b, CompareFunctions.EQUALS());
+        return equals(a, b, EqualsFunctions.EQUALS());
     }
 
     public <T> boolean equals(
         @Optional ReadableCollection<T> a,
         @Optional ReadableCollection<T> b,
-        @Mandatory CompareFunction<T> compareFunction
+        @Mandatory EqualsFunction<T> f
     ) {
         if (a == b) {
             return true;
@@ -56,7 +56,7 @@ public @Service class CollectionComparator {
             @Optional T aa = ai.next();
             @Optional T bb = bi.next();
 
-            if (!compareFunction.equalsOptional(aa, bb)) {
+            if (!f.equalsOptional(aa, bb)) {
                 return false;
             }
         }

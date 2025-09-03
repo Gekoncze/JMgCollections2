@@ -20,20 +20,20 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
 
     private @Mandatory Array<ListItem<SetItem<T>>> array;
     private @Mandatory List<SetItem<T>> list;
-    private final @Mandatory CompareFunction<T> compareFunction;
+    private final @Mandatory EqualsFunction<T> equalsFunction;
     private final @Mandatory HashFunction<T> hashFunction;
 
     public Set() {
-        this(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+        this(EqualsFunctions.EQUALS(), HashFunctions.HASH_CODE());
     }
 
     public Set(
-        @Mandatory CompareFunction<T> compareFunction,
+        @Mandatory EqualsFunction<T> equalsFunction,
         @Mandatory HashFunction<T> hashFunction
     ) {
         this.array = new Array<>(LIMIT);
         this.list = new List<>();
-        this.compareFunction = compareFunction;
+        this.equalsFunction = equalsFunction;
         this.hashFunction = hashFunction;
     }
 
@@ -46,10 +46,10 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
 
     public Set(
         @Mandatory Iterable<? extends T> values,
-        @Mandatory CompareFunction<T> compareFunction,
+        @Mandatory EqualsFunction<T> equalsFunction,
         @Mandatory HashFunction<T> hashFunction
     ) {
-        this(compareFunction, hashFunction);
+        this(equalsFunction, hashFunction);
         for (T value : values) {
             set(value);
         }
@@ -177,7 +177,7 @@ public @Data class Set<T> extends Collection<T> implements ReadableSet<T>, Write
     }
 
     private boolean equals(T a, T b) {
-        return compareFunction.equalsOptional(a, b);
+        return equalsFunction.equalsOptional(a, b);
     }
 
     @Override

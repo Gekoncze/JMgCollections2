@@ -10,7 +10,7 @@ import java.util.Objects;
 public @Component class StringJoiner<T> {
     private final @Mandatory Collection<T> collection;
     private @Mandatory String delimiter = "";
-    private @Mandatory Converter<T, String> converter = Objects::toString;
+    private @Mandatory MapFunction<T, String> converter = Objects::toString;
     private @Mandatory Predicate<T> filter = item -> true;
 
     public StringJoiner(@Mandatory Collection<T> collection) {
@@ -27,7 +27,7 @@ public @Component class StringJoiner<T> {
         return this;
     }
 
-    public @Mandatory StringJoiner<T> withConverter(@Mandatory Converter<T, String> converter) {
+    public @Mandatory StringJoiner<T> withConverter(@Mandatory MapFunction<T, String> converter) {
         this.converter = converter;
         return this;
     }
@@ -48,7 +48,7 @@ public @Component class StringJoiner<T> {
                 if (addPadding) {
                     builder.append(delimiter);
                 }
-                builder.append(converter.toString(t));
+                builder.append(converter.map(t));
                 addPadding = true;
             }
         }

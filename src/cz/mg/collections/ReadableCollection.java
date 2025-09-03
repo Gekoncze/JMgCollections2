@@ -3,8 +3,8 @@ package cz.mg.collections;
 import cz.mg.annotations.classes.Data;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
-import cz.mg.collections.components.CompareFunction;
-import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.EqualsFunction;
+import cz.mg.collections.components.EqualsFunctions;
 import cz.mg.collections.components.Predicate;
 
 public @Data interface ReadableCollection<T> extends Iterable<T> {
@@ -15,10 +15,10 @@ public @Data interface ReadableCollection<T> extends Iterable<T> {
     }
 
     default boolean contains(@Optional T value) {
-        return contains(value, CompareFunctions.EQUALS());
+        return contains(value, EqualsFunctions.EQUALS());
     }
 
-    default boolean contains(@Optional T value, @Mandatory CompareFunction<T> compareFunction) {
+    default boolean contains(@Optional T value, @Mandatory EqualsFunction<T> equalsFunction) {
         for (T current : this) {
             if (current == value) {
                 return true;
@@ -28,7 +28,7 @@ public @Data interface ReadableCollection<T> extends Iterable<T> {
                 continue;
             }
 
-            if (compareFunction.equals(current, value)) {
+            if (equalsFunction.equals(current, value)) {
                 return true;
             }
         }

@@ -3,7 +3,7 @@ package cz.mg.collections.services;
 import cz.mg.annotations.classes.Test;
 import cz.mg.collections.array.Array;
 import cz.mg.collections.list.List;
-import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.EqualsFunctions;
 import cz.mg.test.Assert;
 
 public @Test class CollectionComparatorTest {
@@ -22,44 +22,44 @@ public @Test class CollectionComparatorTest {
         Assert.assertEquals(true, comparator.equals(
             new List<>(),
             new List<>(),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
 
         Assert.assertEquals(false, comparator.equals(
             new List<>(),
             new List<>("a"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>("a"),
             new List<>(),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>("a"),
             new List<>("a"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>("a", "b"),
             new List<>("a", "b"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>("a", "b"),
             new List<>("b", "a"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>("a", "b"),
             new List<>("a", "c"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
@@ -84,61 +84,61 @@ public @Test class CollectionComparatorTest {
         Assert.assertEquals(true, comparator.equals(
             new List<>(a),
             new List<>(a),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>(a),
             new List<>(b),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>(a),
             new List<>(aa),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>(a),
             new List<>(a),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>(a),
             new List<>(b),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>(a),
             new List<>(aa),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>(a, a, a),
             new List<>(a, a, a),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>(a, b, aa),
             new List<>(aa, b, a),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>(a, b, aa),
             new List<>(aa, b, a),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>((Object) null),
             new List<>((Object) null),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
@@ -149,25 +149,25 @@ public @Test class CollectionComparatorTest {
         Assert.assertEquals(true, comparator.equals(
             new List<>((Object) null),
             new List<>((Object) null),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>(a, null),
             new List<>(a, null),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             new List<>(a, null),
             new List<>(a, null),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             new List<>(a, null),
             new List<>(null, a),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
@@ -178,7 +178,7 @@ public @Test class CollectionComparatorTest {
         Assert.assertEquals(false, comparator.equals(
             new List<>(null, null),
             new List<>(null, null, null),
-            CompareFunctions.REFERENCE()
+            EqualsFunctions.REFERENCE()
         ));
 
         Assert.assertEquals(true, comparator.equals(
@@ -192,25 +192,25 @@ public @Test class CollectionComparatorTest {
         Assert.assertEquals(true, comparator.equals(
             list,
             list,
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             list,
             null,
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             null,
             list,
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             null,
             null,
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         list.addLast("7");
@@ -218,19 +218,19 @@ public @Test class CollectionComparatorTest {
         Assert.assertEquals(true, comparator.equals(
             list,
             list,
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(true, comparator.equals(
             list,
             new Array<>("7"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
 
         Assert.assertEquals(false, comparator.equals(
             list,
             new Array<>("x"),
-            CompareFunctions.EQUALS()
+            EqualsFunctions.EQUALS()
         ));
     }
 

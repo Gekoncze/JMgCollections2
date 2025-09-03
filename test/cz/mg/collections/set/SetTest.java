@@ -2,7 +2,7 @@ package cz.mg.collections.set;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.collections.components.CompareFunctions;
+import cz.mg.collections.components.EqualsFunctions;
 import cz.mg.collections.components.HashFunctions;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -70,7 +70,7 @@ public @Test class SetTest {
         TestClass v1 = new TestClass(1);
         TestClass v2 = new TestClass(1);
 
-        Set<TestClass> set2 = new Set<>(CompareFunctions.REFERENCE(), HashFunctions.HASH_CODE());
+        Set<TestClass> set2 = new Set<>(EqualsFunctions.REFERENCE(), HashFunctions.HASH_CODE());
         set2.set(v1);
         set2.set(v2);
 
@@ -78,7 +78,7 @@ public @Test class SetTest {
         Assert.assertEquals(true, set2.contains(v2));
         Assert.assertEquals(2, set2.count());
 
-        Set<TestClass> set3 = new Set<>(CompareFunctions.EQUALS(), HashFunctions.HASH_CODE());
+        Set<TestClass> set3 = new Set<>(EqualsFunctions.EQUALS(), HashFunctions.HASH_CODE());
         set3.set(v1);
         set3.set(v2);
 
