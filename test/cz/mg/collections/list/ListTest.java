@@ -3,7 +3,7 @@ package cz.mg.collections.list;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.test.Assert;
-import cz.mg.test.BiAssertions;
+import cz.mg.test.Assertions;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -486,9 +486,9 @@ public @Test class ListTest {
     }
 
     private void checkList(@Mandatory List<String> list, String... expectedItems) {
-        BiAssertions
-            .assertThat(new List<>(expectedItems), list)
-            .areEqual();
+        Assertions
+            .assertThatCollection(list)
+            .isEqualTo(new List<>(expectedItems));
     }
 
     private void testClear() {
