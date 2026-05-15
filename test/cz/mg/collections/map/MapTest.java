@@ -22,6 +22,8 @@ public @Test class MapTest {
         test.testGetAndSet();
         test.testGetOptionalDefault();
         test.testGetOrCreate();
+        test.testContainsKey();
+        test.testContainsValue();
         test.testConstructors();
         test.testClear();
         test.testIterator();
@@ -129,6 +131,42 @@ public @Test class MapTest {
         pair.setValue(77L);
         Assert.assertEquals(7L, map.getOrCreate(1L, Pair::new).getKey());
         Assert.assertEquals(77L, map.getOrCreate(1L, Pair::new).getValue());
+    }
+
+    private void testContainsKey() {
+        Map<String, Integer> map = new Map<>();
+        Assert.assertEquals(false, map.containsKey(null));
+        Assert.assertEquals(false, map.containsKey("A"));
+        map.set("A", 1);
+        Assert.assertEquals(false, map.containsKey(null));
+        Assert.assertEquals(true, map.containsKey("A"));
+        map.set(null, 0);
+        Assert.assertEquals(true, map.containsKey(null));
+        Assert.assertEquals(true, map.containsKey("A"));
+        map.unset("A");
+        Assert.assertEquals(true, map.containsKey(null));
+        Assert.assertEquals(false, map.containsKey("A"));
+        map.unset(null);
+        Assert.assertEquals(false, map.containsKey(null));
+        Assert.assertEquals(false, map.containsKey("A"));
+    }
+
+    private void testContainsValue() {
+        Map<String, Integer> map = new Map<>();
+        Assert.assertEquals(false, map.containsValue(null));
+        Assert.assertEquals(false, map.containsValue(1));
+        map.set("A", 1);
+        Assert.assertEquals(false, map.containsValue(null));
+        Assert.assertEquals(true, map.containsValue(1));
+        map.set("", null);
+        Assert.assertEquals(true, map.containsValue(null));
+        Assert.assertEquals(true, map.containsValue(1));
+        map.unset("A");
+        Assert.assertEquals(true, map.containsValue(null));
+        Assert.assertEquals(false, map.containsValue(1));
+        map.unset("");
+        Assert.assertEquals(false, map.containsValue(null));
+        Assert.assertEquals(false, map.containsValue(1));
     }
 
     private void testConstructors() {

@@ -9,4 +9,6 @@ public @Data interface ReadableMap<K,V> extends Iterable<ReadablePair<K,V>> {
     V get(K key);
     @Optional V getOptional(K key);
     V getOrDefault(K key, V defaultValue);
+    boolean containsKey(K key);
+    boolean containsValue(V value);
 }

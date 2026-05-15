@@ -15,6 +15,7 @@ import cz.mg.functions.HashFunctions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements ReadableMap<K,V>, WriteableMap<K,V> {
     private static final int LIMIT = 2;
@@ -111,6 +112,21 @@ public @Data class Map<K,V> extends Collection<ReadablePair<K,V>> implements Rea
             set(key, value);
             return value;
         }
+    }
+
+    @Override
+    public boolean containsKey(K key) {
+        return findItem(key) != null;
+    }
+
+    @Override
+    public boolean containsValue(V value) {
+        for (ReadablePair<K, V> pair : this) {
+            if (Objects.equals(pair.getValue(), value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private @Optional ListItem<MapPair<K,V>> findItem(K key) {
